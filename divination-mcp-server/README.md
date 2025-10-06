@@ -156,7 +156,10 @@ This project integrates methods and knowledge from:
 - **Tarot**: Complete 78-card data from [tarotcardapi](https://github.com/zyaproxy-Jun/tarotcardapi) by Kushagra Srivastava (MIT License)
 - **Zi Wei Dou Shu**: Based on iztro library (https://github.com/SylarLong/iztro)
 - **Western Astrology**: Traditional Western astrology principles
-- **Dream Analysis**: Psychological and symbolic interpretation methods
+- **Dream Analysis**: Professional prompt engineering from [dream-interpretation](https://github.com/zyaproxy-Jun/dream-interpretation) by zyaproxy-Jun
+  - AI-powered structured analysis framework
+  - Multi-dimensional interpretation (Symbols, Culture, Psychology, Reality)
+  - 10+ language support with cultural adaptation
 - **BaZi**: Traditional Chinese Four Pillars system
 - **I-Ching**: Book of Changes (King Wen sequence) - Complete 64 hexagrams
   - Chinese text: Original I-Ching (周易) text (Public Domain)
@@ -178,9 +181,10 @@ This divination server is provided for entertainment and self-reflection purpose
 ## Acknowledgments
 
 - **tarotcardapi** by Kushagra Srivastava for complete 78-card tarot data
+- **dream-interpretation** by zyaproxy-Jun for professional dream analysis prompt engineering
 - **i-ching.el** by nik gaffney (FoAM) for I-Ching English translations and hexagram interpretations
 - **iztro** library for Zi Wei Dou Shu calculations
 - **lunar-javascript** for accurate lunar calendar conversions
-- **OpenAI** for enhanced dream interpretation capabilities
+- **OpenAI** for AI-powered interpretation capabilities
 - Wilhelm-Baynes, James Legge, and Richard Pearson for classic I-Ching translations
 - Traditional divination wisdom passed down through generations
