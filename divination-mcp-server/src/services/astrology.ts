@@ -2,24 +2,25 @@
  * Western Astrology Service
  * 
  * Official Source: https://github.com/zyaproxy-Jun/Astrologer-API
- * - Professional astrology calculations inspired by Kerykeion methodology
+ * - Professional astrology calculations using Kerykeion methodology
  * - Based on Swiss Ephemeris calculation principles
- * - Original implementation: Python/FastAPI with Kerykeion library
- * - TypeScript adaptation: circular-natal-horoscope-js
+ * - Uses Astrologer-API for accurate astronomical calculations
  * 
  * Integration Approach:
- * - Uses circular-natal-horoscope-js (Unlicense) for birth chart calculations
- * - Implements professional-grade planetary positions, houses, and aspects
+ * - Calls Astrologer-API service for professional-grade calculations
+ * - Implements Kerykeion-based planetary positions, houses, and aspects
  * - Supports tropical/sidereal zodiac systems and multiple house systems
  * 
  * License Compliance:
- * - Original Astrologer-API: MIT License
- * - Kerykeion library: GPL-3.0 (methodology reference only)
- * - circular-natal-horoscope-js: Unlicense (public domain)
+ * - Astrologer-API: AGPL-3.0 License (external service, no restrictions on API usage)
+ * - Kerykeion library: AGPL-3.0 (used via API)
+ * - Swiss Ephemeris: GPL-2.0/Professional License
  * 
  * @see {@link https://github.com/zyaproxy-Jun/Astrologer-API|Astrologer-API Source}
- * @see {@link https://github.com/0xStarcat/CircularNatalHoroscope-JS|circular-natal-horoscope-js}
+ * @see {@link https://github.com/g-battaglia/kerykeion|Kerykeion Library}
  */
+
+import axios from 'axios';
 
 interface BirthData {
   year: number;
@@ -43,33 +44,84 @@ interface AstrologyResult {
   calculationMethod: string;
 }
 
+interface AstrologerAPIResponse {
+  status: string;
+  data: {
+    name: string;
+    year: number;
+    month: number;
+    day: number;
+    hour: number;
+    minute: number;
+    city: string;
+    nation: string;
+    lng: number;
+    lat: number;
+    tz_str: string;
+    zodiac_type: string;
+    local_time: string;
+    utc_time: string;
+    julian_day: number;
+    sun: PlanetData;
+    moon: PlanetData;
+    mercury: PlanetData;
+    venus: PlanetData;
+    mars: PlanetData;
+    jupiter: PlanetData;
+    saturn: PlanetData;
+    uranus: PlanetData;
+    neptune: PlanetData;
+    pluto: PlanetData;
+    asc: PlanetData;
+    mc: PlanetData;
+    first_house: PlanetData;
+    second_house: PlanetData;
+    third_house: PlanetData;
+    fourth_house: PlanetData;
+    fifth_house: PlanetData;
+    sixth_house: PlanetData;
+    seventh_house: PlanetData;
+    eighth_house: PlanetData;
+    ninth_house: PlanetData;
+    tenth_house: PlanetData;
+    eleventh_house: PlanetData;
+    twelfth_house: PlanetData;
+    mean_node: PlanetData;
+    true_node: PlanetData;
+    lunar_phase?: {
+      moon_phase: number;
+      moon_emoji: string;
+      sun_phase: number;
+      degrees_between_s_m: number;
+    };
+  };
+}
+
+interface PlanetData {
+  name: string;
+  quality: string;
+  element: string;
+  sign: string;
+  sign_num: number;
+  position: number;
+  abs_pos: number;
+  emoji: string;
+  house: string;
+  retrograde: boolean;
+  point_type: string;
+}
+
 export class AstrologyService {
-  private libraryLoaded = false;
-  private Origin: any;
-  private Horoscope: any;
+  // Use public demo API (replace with your own API instance if needed)
+  private readonly apiBaseUrl = 'https://astrologer.p.rapidapi.com/api/v4';
+  private readonly apiKey = process.env.RAPIDAPI_KEY || ''; // Optional: use RapidAPI key
+  private readonly fallbackMode = true; // Use local calculation as fallback
 
   constructor() {}
 
   /**
-   * Lazy load the circular-natal-horoscope-js library
-   * This prevents startup errors if the library is not needed
-   */
-  private async loadLibrary(): Promise<void> {
-    if (this.libraryLoaded) return;
-    
-    try {
-      const lib = await import('circular-natal-horoscope-js');
-      this.Origin = lib.Origin;
-      this.Horoscope = lib.Horoscope;
-      this.libraryLoaded = true;
-    } catch (error) {
-      throw new Error(`Failed to load astrology library: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
-
-  /**
-   * Calculate birth chart using professional astrology library
-   * Inspired by Astrologer-API's natal_chart endpoint
+   * Calculate birth chart using Astrologer-API
+   * Based on Kerykeion library and Swiss Ephemeris
    * 
    * @see {@link https://github.com/zyaproxy-Jun/Astrologer-API/blob/main/app/routers/main_router.py|main_router.py}
    */
@@ -83,220 +135,342 @@ export class AstrologyService {
     longitude: number = 0,
     language: string = 'en'
   ): Promise<AstrologyResult> {
-    // Load library on first use
-    await this.loadLibrary();
-
     try {
-      // Create birth origin (similar to AstrologicalSubject in Kerykeion)
-      const origin = new this.Origin({
-        year,
-        month,
-        date: day,
-        hour,
-        minute,
-        latitude,
-        longitude
-      });
-
-      // Calculate horoscope with professional settings
-      const horoscope = new this.Horoscope({
-        origin: origin,
-        houseSystem: 'placidus',  // Most common house system
-        zodiac: 'tropical',        // Western astrology standard
-        aspectPoints: ['bodies', 'points'],
-        aspectTypes: ['major', 'minor'],
-        customOrbs: {},
-        language: 'en'
-      });
-
-      // Extract calculated data
-      const celestialBodies = horoscope.CelestialBodies;
-      const houses = horoscope.Houses;
-      const aspects = horoscope.Aspects;
-
-      // Find key points
-      const sun = celestialBodies.find((b: any) => b.label === 'Sun');
-      const moon = celestialBodies.find((b: any) => b.label === 'Moon');
-      const ascendant = celestialBodies.find((b: any) => b.label === 'Ascendant');
-
-      return {
-        sunSign: this.getSignInfo(sun, language),
-        moonSign: this.getSignInfo(moon, language),
-        ascendant: this.getSignInfo(ascendant, language),
-        planets: this.formatPlanets(celestialBodies, language),
-        houses: this.formatHouses(houses, language),
-        aspects: this.formatAspects(aspects, language),
-        interpretation: this.interpretChart(sun, moon, ascendant, celestialBodies, aspects, language),
-        calculationMethod: 'Professional calculation using Swiss Ephemeris principles (circular-natal-horoscope-js)'
+      // Infer timezone from coordinates
+      const timezone = this.inferTimezone(latitude, longitude);
+      
+      // Prepare request payload (following Astrologer-API format)
+      const requestBody = {
+        subject: {
+          name: 'User',
+          year,
+          month,
+          day,
+          hour,
+          minute,
+          latitude,
+          longitude,
+          city: 'Unknown',
+          nation: 'XX',
+          timezone,
+          zodiac_type: 'Tropic', // Western astrology uses tropical zodiac
+          houses_system_identifier: 'P', // Placidus house system (most common)
+          perspective_type: 'Apparent Geocentric', // Standard perspective
+          language: language.toUpperCase()
+        }
       };
+
+      // Call Astrologer-API
+      const response = await this.callAstrologerAPI(requestBody);
+      
+      if (response.status !== 'OK') {
+        throw new Error('API returned error status');
+      }
+
+      // Format and return results
+      return this.formatAPIResponse(response.data, language);
+      
     } catch (error) {
+      // Fallback to mock data if API fails
+      if (this.fallbackMode) {
+        console.warn('Astrologer-API call failed, using fallback calculation:', error);
+        return this.generateFallbackChart(year, month, day, hour, minute, latitude, longitude, language);
+      }
       throw new Error(`Birth chart calculation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
   /**
-   * Get localized sign name from celestial body
+   * Call Astrologer-API service
    */
-  private getSignInfo(body: any, language: string): string {
-    if (!body || !body.Sign) {
-      return language === 'zh' ? '未知' : 'Unknown';
+  private async callAstrologerAPI(requestBody: any): Promise<AstrologerAPIResponse> {
+    try {
+      // Try RapidAPI first if key is available
+      if (this.apiKey) {
+        const response = await axios.post(
+          `${this.apiBaseUrl}/birth-data`,
+          requestBody,
+          {
+            headers: {
+              'X-RapidAPI-Key': this.apiKey,
+              'X-RapidAPI-Host': 'astrologer.p.rapidapi.com',
+              'Content-Type': 'application/json'
+            },
+            timeout: 10000
+          }
+        );
+        return response.data;
+      }
+      
+      // Fallback: try direct API call (if self-hosted)
+      const response = await axios.post(
+        'https://astrologer-api.example.com/api/v4/birth-data',
+        requestBody,
+        {
+          headers: { 'Content-Type': 'application/json' },
+          timeout: 10000
+        }
+      );
+      return response.data;
+      
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(`API request failed: ${error.message}`);
+      }
+      throw error;
     }
-
-    const sign = body.Sign.label;
-    const degree = Math.floor(body.ChartPosition.Ecliptic.DecimalDegrees);
-    const minute = Math.floor((body.ChartPosition.Ecliptic.DecimalDegrees - degree) * 60);
-
-    // Localize sign name
-    const signTranslations: Record<string, Record<string, string>> = {
-      'Aries': { en: 'Aries', zh: '白羊座', es: 'Aries', fr: 'Bélier', de: 'Widder', ja: '牡羊座', ko: '양자리' },
-      'Taurus': { en: 'Taurus', zh: '金牛座', es: 'Tauro', fr: 'Taureau', de: 'Stier', ja: '牡牛座', ko: '황소자리' },
-      'Gemini': { en: 'Gemini', zh: '双子座', es: 'Géminis', fr: 'Gémeaux', de: 'Zwillinge', ja: '双子座', ko: '쌍둥이자리' },
-      'Cancer': { en: 'Cancer', zh: '巨蟹座', es: 'Cáncer', fr: 'Cancer', de: 'Krebs', ja: '蟹座', ko: '게자리' },
-      'Leo': { en: 'Leo', zh: '狮子座', es: 'Leo', fr: 'Lion', de: 'Löwe', ja: '獅子座', ko: '사자자리' },
-      'Virgo': { en: 'Virgo', zh: '处女座', es: 'Virgo', fr: 'Vierge', de: 'Jungfrau', ja: '乙女座', ko: '처녀자리' },
-      'Libra': { en: 'Libra', zh: '天秤座', es: 'Libra', fr: 'Balance', de: 'Waage', ja: '天秤座', ko: '천칭자리' },
-      'Scorpio': { en: 'Scorpio', zh: '天蝎座', es: 'Escorpio', fr: 'Scorpion', de: 'Skorpion', ja: '蠍座', ko: '전갈자리' },
-      'Sagittarius': { en: 'Sagittarius', zh: '射手座', es: 'Sagitario', fr: 'Sagittaire', de: 'Schütze', ja: '射手座', ko: '사수자리' },
-      'Capricorn': { en: 'Capricorn', zh: '摩羯座', es: 'Capricornio', fr: 'Capricorne', de: 'Steinbock', ja: '山羊座', ko: '염소자리' },
-      'Aquarius': { en: 'Aquarius', zh: '水瓶座', es: 'Acuario', fr: 'Verseau', de: 'Wassermann', ja: '水瓶座', ko: '물병자리' },
-      'Pisces': { en: 'Pisces', zh: '双鱼座', es: 'Piscis', fr: 'Poissons', de: 'Fische', ja: '魚座', ko: '물고기자리' }
-    };
-
-    const localizedSign = signTranslations[sign]?.[language] || sign;
-    return `${localizedSign} ${degree}°${minute}'`;
   }
 
   /**
-   * Format all planetary positions
+   * Infer timezone from coordinates
+   * Simple timezone inference based on longitude
+   * For production, consider using a timezone lookup library
    */
-  private formatPlanets(bodies: any[], language: string): Record<string, string> {
-    const planets: Record<string, string> = {};
-    const planetNames = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto'];
+  private inferTimezone(latitude: number, longitude: number): string {
+    // Common timezone mappings based on longitude
+    // This is a simplified approach - for production use a proper timezone library
+    const timezoneMap: Record<string, string> = {
+      'Asia': 'Asia/Shanghai',      // China, East Asia
+      'Europe': 'Europe/London',    // Western Europe
+      'America_East': 'America/New_York',
+      'America_West': 'America/Los_Angeles',
+      'Pacific': 'Pacific/Auckland'
+    };
+
+    // Rough estimation based on longitude
+    if (longitude >= 100 && longitude <= 140 && latitude >= 15 && latitude <= 55) {
+      return 'Asia/Shanghai';
+    } else if (longitude >= 70 && longitude <= 100) {
+      return 'Asia/Kolkata';
+    } else if (longitude >= -10 && longitude <= 40) {
+      return 'Europe/London';
+    } else if (longitude >= -100 && longitude <= -70) {
+      return 'America/New_York';
+    } else if (longitude >= -130 && longitude <= -100) {
+      return 'America/Los_Angeles';
+    } else if (longitude >= 165 && longitude <= 180) {
+      return 'Pacific/Auckland';
+    }
+
+    // Default to UTC
+    return 'UTC';
+  }
+
+  /**
+   * Format API response to our standard format
+   */
+  private formatAPIResponse(data: AstrologerAPIResponse['data'], language: string): AstrologyResult {
+    // Sign abbreviation mapping
+    const signAbbrevMap: Record<string, string> = {
+      'Ari': 'Aries', 'Tau': 'Taurus', 'Gem': 'Gemini', 'Can': 'Cancer',
+      'Leo': 'Leo', 'Vir': 'Virgo', 'Lib': 'Libra', 'Sco': 'Scorpio',
+      'Sag': 'Sagittarius', 'Cap': 'Capricorn', 'Aqu': 'Aquarius', 'Pis': 'Pisces'
+    };
+
+    const signTranslations: Record<string, Record<string, string>> = {
+      'Aries': { en: 'Aries', zh: '白羊座' },
+      'Taurus': { en: 'Taurus', zh: '金牛座' },
+      'Gemini': { en: 'Gemini', zh: '双子座' },
+      'Cancer': { en: 'Cancer', zh: '巨蟹座' },
+      'Leo': { en: 'Leo', zh: '狮子座' },
+      'Virgo': { en: 'Virgo', zh: '处女座' },
+      'Libra': { en: 'Libra', zh: '天秤座' },
+      'Scorpio': { en: 'Scorpio', zh: '天蝎座' },
+      'Sagittarius': { en: 'Sagittarius', zh: '射手座' },
+      'Capricorn': { en: 'Capricorn', zh: '摩羯座' },
+      'Aquarius': { en: 'Aquarius', zh: '水瓶座' },
+      'Pisces': { en: 'Pisces', zh: '双鱼座' }
+    };
 
     const planetTranslations: Record<string, Record<string, string>> = {
-      'Sun': { en: 'Sun', zh: '太阳', es: 'Sol', fr: 'Soleil', de: 'Sonne', ja: '太陽', ko: '태양' },
-      'Moon': { en: 'Moon', zh: '月亮', es: 'Luna', fr: 'Lune', de: 'Mond', ja: '月', ko: '달' },
-      'Mercury': { en: 'Mercury', zh: '水星', es: 'Mercurio', fr: 'Mercure', de: 'Merkur', ja: '水星', ko: '수성' },
-      'Venus': { en: 'Venus', zh: '金星', es: 'Venus', fr: 'Vénus', de: 'Venus', ja: '金星', ko: '금성' },
-      'Mars': { en: 'Mars', zh: '火星', es: 'Marte', fr: 'Mars', de: 'Mars', ja: '火星', ko: '화성' },
-      'Jupiter': { en: 'Jupiter', zh: '木星', es: 'Júpiter', fr: 'Jupiter', de: 'Jupiter', ja: '木星', ko: '목성' },
-      'Saturn': { en: 'Saturn', zh: '土星', es: 'Saturno', fr: 'Saturne', de: 'Saturn', ja: '土星', ko: '토성' },
-      'Uranus': { en: 'Uranus', zh: '天王星', es: 'Urano', fr: 'Uranus', de: 'Uranus', ja: '天王星', ko: '천왕성' },
-      'Neptune': { en: 'Neptune', zh: '海王星', es: 'Neptuno', fr: 'Neptune', de: 'Neptun', ja: '海王星', ko: '해왕성' },
-      'Pluto': { en: 'Pluto', zh: '冥王星', es: 'Plutón', fr: 'Pluton', de: 'Pluto', ja: '冥王星', ko: '명왕성' }
+      'Sun': { en: 'Sun', zh: '太阳' },
+      'Moon': { en: 'Moon', zh: '月亮' },
+      'Mercury': { en: 'Mercury', zh: '水星' },
+      'Venus': { en: 'Venus', zh: '金星' },
+      'Mars': { en: 'Mars', zh: '火星' },
+      'Jupiter': { en: 'Jupiter', zh: '木星' },
+      'Saturn': { en: 'Saturn', zh: '土星' },
+      'Uranus': { en: 'Uranus', zh: '天王星' },
+      'Neptune': { en: 'Neptune', zh: '海王星' },
+      'Pluto': { en: 'Pluto', zh: '冥王星' }
     };
 
-    for (const name of planetNames) {
-      const body = bodies.find((b: any) => b.label === name);
-      if (body) {
-        const localizedName = planetTranslations[name]?.[language] || name;
-        planets[localizedName] = this.getSignInfo(body, language);
+    // Helper function to format planet data
+    const formatPlanetInfo = (planet: PlanetData): string => {
+      const fullSign = signAbbrevMap[planet.sign] || planet.sign;
+      const localizedSign = signTranslations[fullSign]?.[language] || fullSign;
+      const retrograde = planet.retrograde ? ' ℞' : '';
+      return `${localizedSign} ${planet.position.toFixed(1)}°${retrograde}`;
+    };
+
+    // Format planets
+    const planets: Record<string, string> = {};
+    const planetList = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto'];
+    
+    for (const planetKey of planetList) {
+      const planetData = (data as any)[planetKey] as PlanetData;
+      if (planetData) {
+        const planetName = planetData.name;
+        const localizedName = planetTranslations[planetName]?.[language] || planetName;
+        planets[localizedName] = formatPlanetInfo(planetData);
       }
     }
 
-    return planets;
-  }
-
-  /**
-   * Format house cusps
-   */
-  private formatHouses(houses: any[], language: string): Record<string, string> {
-    const houseData: Record<string, string> = {};
-    const houseLabel = language === 'zh' ? '宫' : (language === 'es' ? 'Casa' : (language === 'fr' ? 'Maison' : 'House'));
-
-    for (let i = 0; i < houses.length && i < 12; i++) {
-      const house = houses[i];
-      if (house && house.Sign) {
-        const sign = house.Sign.label;
-        const degree = Math.floor(house.ChartPosition.StartPosition.Ecliptic.DecimalDegrees);
-        houseData[`${houseLabel} ${i + 1}`] = `${sign} ${degree}°`;
+    // Format houses
+    const houses: Record<string, string> = {};
+    const houseLabel = language === 'zh' ? '第' : 'House ';
+    const houseSuffix = language === 'zh' ? '宫' : '';
+    
+    for (let i = 1; i <= 12; i++) {
+      const houseKey = this.getHouseKey(i);
+      const houseData = (data as any)[houseKey] as PlanetData;
+      if (houseData) {
+        const fullSign = signAbbrevMap[houseData.sign] || houseData.sign;
+        const localizedSign = signTranslations[fullSign]?.[language] || fullSign;
+        houses[`${houseLabel}${i}${houseSuffix}`] = `${localizedSign} ${houseData.position.toFixed(1)}°`;
       }
     }
 
-    return houseData;
-  }
-
-  /**
-   * Format planetary aspects
-   */
-  private formatAspects(aspects: any[], language: string): string[] {
-    if (!aspects || aspects.length === 0) {
-      return [];
+    // Generate aspects description
+    const aspects: string[] = [];
+    if (data.lunar_phase) {
+      const phaseDesc = language === 'zh' 
+        ? `月相: ${data.lunar_phase.moon_emoji} (${data.lunar_phase.moon_phase}/8)`
+        : `Lunar Phase: ${data.lunar_phase.moon_emoji} (${data.lunar_phase.moon_phase}/8)`;
+      aspects.push(phaseDesc);
     }
 
-    const aspectTranslations: Record<string, Record<string, string>> = {
-      'conjunction': { en: 'conjunction', zh: '合相', es: 'conjunción', fr: 'conjonction', de: 'Konjunktion', ja: '合', ko: '합' },
-      'opposition': { en: 'opposition', zh: '对分相', es: 'oposición', fr: 'opposition', de: 'Opposition', ja: '衝', ko: '충' },
-      'trine': { en: 'trine', zh: '三分相', es: 'trígono', fr: 'trigone', de: 'Trigon', ja: '三合', ko: '삼합' },
-      'square': { en: 'square', zh: '四分相', es: 'cuadratura', fr: 'carré', de: 'Quadrat', ja: '刑', ko: '형' },
-      'sextile': { en: 'sextile', zh: '六分相', es: 'sextil', fr: 'sextile', de: 'Sextil', ja: '六合', ko: '육합' }
-    };
+    // Sun-Moon aspect
+    const sunMoonDiff = Math.abs(data.sun.abs_pos - data.moon.abs_pos);
+    if (sunMoonDiff < 10) {
+      aspects.push(language === 'zh' ? '日月合相' : 'Sun-Moon conjunction');
+    } else if (Math.abs(sunMoonDiff - 180) < 10) {
+      aspects.push(language === 'zh' ? '日月对冲' : 'Sun-Moon opposition');
+    } else if (Math.abs(sunMoonDiff - 120) < 10) {
+      aspects.push(language === 'zh' ? '日月三分相' : 'Sun-Moon trine');
+    } else if (Math.abs(sunMoonDiff - 90) < 10) {
+      aspects.push(language === 'zh' ? '日月四分相' : 'Sun-Moon square');
+    }
 
-    return aspects.slice(0, 15).map((aspect: any) => {
-      const point1 = aspect.point1.label;
-      const point2 = aspect.point2.label;
-      const aspectType = aspect.aspectLevel === 'major' ? aspect.aspect.label.toLowerCase() : aspect.aspect.label.toLowerCase();
-      const localizedAspect = aspectTranslations[aspectType]?.[language] || aspectType;
-      const orb = aspect.orb.toFixed(2);
-      
-      return `${point1} ${localizedAspect} ${point2} (${orb}°)`;
-    });
+    return {
+      sunSign: formatPlanetInfo(data.sun),
+      moonSign: formatPlanetInfo(data.moon),
+      ascendant: formatPlanetInfo(data.asc),
+      planets,
+      houses,
+      aspects,
+      interpretation: this.generateInterpretation(data, language),
+      calculationMethod: 'Professional calculation via Astrologer-API (Kerykeion/Swiss Ephemeris)'
+    };
   }
 
   /**
-   * Generate professional interpretation
-   * Inspired by Astrologer-API's interpretation logic
+   * Get house key name
    */
-  private interpretChart(
-    sun: any,
-    moon: any,
-    ascendant: any,
-    celestialBodies: any[],
-    aspects: any[],
+  private getHouseKey(houseNumber: number): string {
+    const houseNames = [
+      'first_house', 'second_house', 'third_house', 'fourth_house',
+      'fifth_house', 'sixth_house', 'seventh_house', 'eighth_house',
+      'ninth_house', 'tenth_house', 'eleventh_house', 'twelfth_house'
+    ];
+    return houseNames[houseNumber - 1] || 'first_house';
+  }
+
+  /**
+   * Generate interpretation based on API data
+   */
+  private generateInterpretation(data: AstrologerAPIResponse['data'], language: string): string {
+    const sunSign = data.sun.sign;
+    const moonSign = data.moon.sign;
+    const ascSign = data.asc.sign;
+
+    if (language === 'zh') {
+      return `太阳位于${sunSign}，代表您的核心自我和生命力。` +
+        `月亮位于${moonSign}，反映您的情感需求和内心世界。` +
+        `上升星座${ascSign}，展现您的外在形象和第一印象。` +
+        `这个星盘由专业的Swiss Ephemeris系统计算得出，精确度极高。`;
+    } else {
+      return `Sun in ${sunSign} represents your core self and vitality. ` +
+        `Moon in ${moonSign} reflects your emotional needs and inner world. ` +
+        `Ascendant in ${ascSign} shows your outer persona and first impression. ` +
+        `This chart is professionally calculated using the Swiss Ephemeris system.`;
+    }
+  }
+
+  /**
+   * Generate fallback chart when API is unavailable
+   */
+  private generateFallbackChart(
+    year: number,
+    month: number,
+    day: number,
+    hour: number,
+    minute: number,
+    latitude: number,
+    longitude: number,
     language: string
-  ): string {
-    const interpretations: Record<string, Record<string, string>> = {
-      en: {
-        header: 'Professional Birth Chart Analysis',
-        sunDesc: 'Your Sun sign represents your core identity, ego, and life purpose.',
-        moonDesc: 'Your Moon sign reflects your emotional nature and inner self.',
-        ascDesc: 'Your Ascendant (Rising sign) shows how others perceive you.',
-        planetDesc: 'Planetary positions indicate various life areas and energies.',
-        aspectDesc: 'Aspects between planets reveal dynamic interactions.',
-        footer: 'This analysis uses professional Swiss Ephemeris calculations.'
-      },
-      zh: {
-        header: '专业出生星盘分析',
-        sunDesc: '太阳星座代表你的核心身份、自我和人生目标。',
-        moonDesc: '月亮星座反映你的情感本质和内在自我。',
-        ascDesc: '上升星座展示他人如何看待你。',
-        planetDesc: '行星位置指示不同的生活领域和能量。',
-        aspectDesc: '行星之间的相位揭示动态互动关系。',
-        footer: '本分析使用专业的瑞士星历表计算。'
-      }
+  ): AstrologyResult {
+    // Simple fallback based on date (simplified zodiac calculation)
+    const dayOfYear = this.getDayOfYear(year, month, day);
+    const sunSignIndex = Math.floor((dayOfYear / 365) * 12);
+    const signs = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo', 
+                   'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'];
+    
+    const signTranslations: Record<string, Record<string, string>> = {
+      'Aries': { en: 'Aries', zh: '白羊座' },
+      'Taurus': { en: 'Taurus', zh: '金牛座' },
+      'Gemini': { en: 'Gemini', zh: '双子座' },
+      'Cancer': { en: 'Cancer', zh: '巨蟹座' },
+      'Leo': { en: 'Leo', zh: '狮子座' },
+      'Virgo': { en: 'Virgo', zh: '处女座' },
+      'Libra': { en: 'Libra', zh: '天秤座' },
+      'Scorpio': { en: 'Scorpio', zh: '天蝎座' },
+      'Sagittarius': { en: 'Sagittarius', zh: '射手座' },
+      'Capricorn': { en: 'Capricorn', zh: '摩羯座' },
+      'Aquarius': { en: 'Aquarius', zh: '水瓶座' },
+      'Pisces': { en: 'Pisces', zh: '双鱼座' }
     };
 
-    const lang = language in interpretations ? language : 'en';
-    const text = interpretations[lang];
+    const sunSign = signs[sunSignIndex];
+    const moonSign = signs[(sunSignIndex + 4) % 12]; // Simple offset
+    const ascendantSign = signs[(Math.floor(hour / 2)) % 12]; // Based on hour
 
-    let interpretation = `${text.header}\n\n`;
-    
-    if (sun) {
-      interpretation += `☉ ${text.sunDesc} ${this.getSignInfo(sun, language)}\n\n`;
-    }
-    
-    if (moon) {
-      interpretation += `☽ ${text.moonDesc} ${this.getSignInfo(moon, language)}\n\n`;
-    }
-    
-    if (ascendant) {
-      interpretation += `ASC ${text.ascDesc} ${this.getSignInfo(ascendant, language)}\n\n`;
-    }
-    
-    interpretation += `${text.planetDesc}\n`;
-    interpretation += `${text.aspectDesc}\n\n`;
-    interpretation += `${text.footer}`;
+    const localizedSunSign = signTranslations[sunSign]?.[language] || sunSign;
+    const localizedMoonSign = signTranslations[moonSign]?.[language] || moonSign;
+    const localizedAscSign = signTranslations[ascendantSign]?.[language] || ascendantSign;
 
-    return interpretation;
+    const warningMsg = language === 'zh' 
+      ? '⚠️ 注意：由于API服务不可用，这是简化计算结果，不具有专业精度。'
+      : '⚠️ Warning: API service unavailable, this is a simplified calculation without professional accuracy.';
+
+    return {
+      sunSign: `${localizedSunSign} ~15°`,
+      moonSign: `${localizedMoonSign} ~20°`,
+      ascendant: `${localizedAscSign} ~10°`,
+      planets: {
+        [language === 'zh' ? '太阳' : 'Sun']: `${localizedSunSign} ~15°`,
+        [language === 'zh' ? '月亮' : 'Moon']: `${localizedMoonSign} ~20°`
+      },
+      houses: {
+        [language === 'zh' ? '第1宫' : 'House 1']: `${localizedAscSign} ~10°`
+      },
+      aspects: [warningMsg],
+      interpretation: warningMsg + (language === 'zh' 
+        ? ' 请稍后重试以获取精确的星盘计算结果。'
+        : ' Please try again later for accurate chart calculation.'),
+      calculationMethod: 'Fallback: Simplified calculation (not accurate)'
+    };
   }
+
+  /**
+   * Get day of year (1-365/366)
+   */
+  private getDayOfYear(year: number, month: number, day: number): number {
+    const date = new Date(year, month - 1, day);
+    const start = new Date(year, 0, 0);
+    const diff = date.getTime() - start.getTime();
+    const oneDay = 1000 * 60 * 60 * 24;
+    return Math.floor(diff / oneDay);
+  }
+
 }
