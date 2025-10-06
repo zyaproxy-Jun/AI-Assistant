@@ -7,11 +7,13 @@ A comprehensive Model Context Protocol (MCP) server that integrates multiple tra
 This MCP server provides tools for:
 
 1. **塔罗占卜 (Tarot Reading)** - Multiple spreads including single card, three-card, and Celtic Cross
+   - Based on [tarotcardapi](https://github.com/zyaproxy-Jun/tarotcardapi) by Kushagra Srivastava
+   - Complete 78-card deck with detailed English descriptions
 2. **紫微斗数 (Zi Wei Dou Shu)** - Chinese Purple Star Astrology chart generation
 3. **西洋占星 (Western Astrology)** - Birth chart calculation and interpretation
 4. **梦境解析 (Dream Interpretation)** - AI-powered dream analysis with psychological insights
 5. **八字命理 (BaZi/Four Pillars)** - Chinese destiny analysis based on birth time
-6. **易经卜卦 (I-Ching)** - Book of Changes divination with hexagram interpretation
+6. **易经卜卦 (I-Ching)** - Book of Changes divination with hexagram interpretation (complete 64 hexagrams)
 
 ## Installation
 
@@ -151,12 +153,12 @@ npm start
 ## Sources
 
 This project integrates methods and knowledge from:
-- Tarot: Traditional Rider-Waite-Smith symbolism
-- Zi Wei Dou Shu: Based on iztro library (https://github.com/SylarLong/iztro)
-- Western Astrology: Traditional Western astrology principles
-- Dream Analysis: Psychological and symbolic interpretation methods
-- BaZi: Traditional Chinese Four Pillars system
-- I-Ching: Book of Changes (King Wen sequence)
+- **Tarot**: Complete 78-card data from [tarotcardapi](https://github.com/zyaproxy-Jun/tarotcardapi) by Kushagra Srivastava (MIT License)
+- **Zi Wei Dou Shu**: Based on iztro library (https://github.com/SylarLong/iztro)
+- **Western Astrology**: Traditional Western astrology principles
+- **Dream Analysis**: Psychological and symbolic interpretation methods
+- **BaZi**: Traditional Chinese Four Pillars system
+- **I-Ching**: Book of Changes (King Wen sequence) - Complete 64 hexagrams
 
 ## License
 
@@ -172,7 +174,8 @@ This divination server is provided for entertainment and self-reflection purpose
 
 ## Acknowledgments
 
-- iztro library for Zi Wei Dou Shu calculations
-- lunar-javascript for accurate lunar calendar conversions
-- OpenAI for enhanced dream interpretation capabilities
+- **tarotcardapi** by Kushagra Srivastava for complete 78-card tarot data
+- **iztro** library for Zi Wei Dou Shu calculations
+- **lunar-javascript** for accurate lunar calendar conversions
+- **OpenAI** for enhanced dream interpretation capabilities
 - Traditional divination wisdom passed down through generations
