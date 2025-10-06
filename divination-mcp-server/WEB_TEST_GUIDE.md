@@ -6,30 +6,32 @@
 
 ## 🚀 快速开始
 
-### 1. 安装依赖
+### 方法一：使用 npm 脚本（推荐）
 
 ```bash
 cd divination-mcp-server
 npm install
-```
-
-### 2. 构建项目
-
-```bash
 npm run build
+npm run web
 ```
 
-### 3. 启动测试服务器
+### 方法二：使用启动脚本
 
 ```bash
+cd divination-mcp-server
+./start-web.sh
+```
+
+### 方法三：直接运行
+
+```bash
+cd divination-mcp-server
+npm install
+npm run build
 node web-server.js
 ```
 
 服务器将在 `http://localhost:3000` 启动。
-
-### 4. 打开浏览器
-
-访问 `http://localhost:3000`，您将看到综合占卜系统测试页面。
 
 ## 🎯 功能说明
 

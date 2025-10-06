@@ -38,8 +38,10 @@ We provide a **fully functional** web interface to test all divination features!
 # Install and build
 npm install && npm run build
 
-# Start the test server
-node web-server.js
+# Start the test server (choose one method)
+npm run web           # Method 1: npm script
+./start-web.sh        # Method 2: bash script
+node web-server.js    # Method 3: direct
 
 # Open in browser
 http://localhost:3000
