@@ -311,12 +311,25 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
 
       case 'birth_chart':
+        // Parse date and time from args
+        const [year, month, day] = (args?.date as string || "").split('-').map(Number);
+        const [hour, minute] = (args?.time as string || "12:00").split(':').map(Number);
+        
         return {
           content: [
             {
               type: 'text',
               text: JSON.stringify(
-                await astrologyService.getBirthChart(args),
+                await astrologyService.getBirthChart(
+                  year,
+                  month,
+                  day,
+                  hour,
+                  minute,
+                  args?.latitude as number || 0,
+                  args?.longitude as number || 0,
+                  args?.language as string || 'zh'
+                ),
                 null,
                 2
               ),
