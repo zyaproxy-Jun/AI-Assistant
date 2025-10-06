@@ -159,6 +159,9 @@ This project integrates methods and knowledge from:
 - **Dream Analysis**: Psychological and symbolic interpretation methods
 - **BaZi**: Traditional Chinese Four Pillars system
 - **I-Ching**: Book of Changes (King Wen sequence) - Complete 64 hexagrams
+  - Chinese text: Original I-Ching (周易) text (Public Domain)
+  - English translations: Based on [i-ching.el](https://github.com/zyaproxy-Jun/i-ching) by nik gaffney (GPL-3.0)
+  - Translations reference: Wilhelm-Baynes, Legge, Pearson
 
 ## License
 
@@ -175,7 +178,9 @@ This divination server is provided for entertainment and self-reflection purpose
 ## Acknowledgments
 
 - **tarotcardapi** by Kushagra Srivastava for complete 78-card tarot data
+- **i-ching.el** by nik gaffney (FoAM) for I-Ching English translations and hexagram interpretations
 - **iztro** library for Zi Wei Dou Shu calculations
 - **lunar-javascript** for accurate lunar calendar conversions
 - **OpenAI** for enhanced dream interpretation capabilities
+- Wilhelm-Baynes, James Legge, and Richard Pearson for classic I-Ching translations
 - Traditional divination wisdom passed down through generations
