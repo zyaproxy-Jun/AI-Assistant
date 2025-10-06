@@ -31,12 +31,21 @@ export class ZiWeiService {
       
       // Normalize gender
       const genderValue = (gender === 'male' || gender === '男') ? '男' : '女';
+      
+      // Convert 24-hour format to 12-hour format (iztro only supports 0-12)
+      // Hours 13-23 need to be converted to 0-11
+      let hourValue = birth_hour;
+      if (hourValue >= 13 && hourValue <= 23) {
+        hourValue = hourValue - 12;
+      } else if (hourValue === 12) {
+        hourValue = 0; // 12 noon = 0 in 12-hour format
+      }
 
       if (lunar_date) {
         // Use lunar date
         astrolabe = astro.byLunar(
           lunar_date,
-          birth_hour,
+          hourValue,
           genderValue,
           is_leap_month,
           true,
@@ -46,7 +55,7 @@ export class ZiWeiService {
         // Use solar date
         astrolabe = astro.bySolar(
           solar_date,
-          birth_hour,
+          hourValue,
           genderValue,
           true,
           language
