@@ -10,7 +10,7 @@ This MCP server provides tools for:
    - Based on [tarotcardapi](https://github.com/zyaproxy-Jun/tarotcardapi) by Kushagra Srivastava
    - Complete 78-card deck with detailed English descriptions
 2. **紫微斗数 (Zi Wei Dou Shu)** - Chinese Purple Star Astrology chart generation
-   - Using [iztro](https://github.com/SylarLong/iztro) library
+   - Using [iztro](https://github.com/zyaproxy-Jun/iztro) library
 3. **西洋占星 (Western Astrology)** - Professional birth chart calculation with Swiss Ephemeris principles
    - Based on [Astrologer-API](https://github.com/zyaproxy-Jun/Astrologer-API) methodology
    - Using [circular-natal-horoscope-js](https://www.npmjs.com/package/circular-natal-horoscope-js) for accurate astronomical calculations
@@ -160,7 +160,7 @@ npm start
 
 This project integrates methods and knowledge from:
 - **Tarot**: Complete 78-card data from [tarotcardapi](https://github.com/zyaproxy-Jun/tarotcardapi) by Kushagra Srivastava (MIT License)
-- **Zi Wei Dou Shu**: Based on [iztro](https://github.com/SylarLong/iztro) library (MIT License)
+- **Zi Wei Dou Shu**: Based on [iztro](https://github.com/zyaproxy-Jun/iztro) library (MIT License, forked from [SylarLong/iztro](https://github.com/SylarLong/iztro))
 - **Western Astrology**: Professional calculations inspired by [Astrologer-API](https://github.com/zyaproxy-Jun/Astrologer-API) (MIT License), using [circular-natal-horoscope-js](https://www.npmjs.com/package/circular-natal-horoscope-js) (Unlicense) for Swiss Ephemeris-based astronomical calculations
 - **Dream Analysis**: Professional prompt engineering from [dream-interpretation](https://github.com/zyaproxy-Jun/dream-interpretation) by zyaproxy-Jun
 - **BaZi**: Using [lunar-javascript](https://github.com/zyaproxy-Jun/lunar-javascript) library (MIT License, forked from [6tail/lunar-javascript](https://github.com/6tail/lunar-javascript))

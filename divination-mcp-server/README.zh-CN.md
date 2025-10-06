@@ -24,7 +24,7 @@
 | 占卜系统 | 描述 | 完整度 | 数据来源 |
 |---------|------|--------|---------|
 | 🃏 **塔罗占卜** | 78张完整塔罗牌，5种牌阵 | ✅ 100% | [tarotcardapi](https://github.com/zyaproxy-Jun/tarotcardapi) |
-| ⭐ **紫微斗数** | 中国传统命理学，十二宫位分析 | ✅ 100% | [iztro](https://github.com/SylarLong/iztro) |
+| ⭐ **紫微斗数** | 中国传统命理学，十二宫位分析 | ✅ 100% | [iztro](https://github.com/zyaproxy-Jun/iztro) |
 | 🌌 **西洋占星** | 出生星盘，行星相位分析 | ✅ 100% | [Astrologer-API](https://github.com/zyaproxy-Jun/Astrologer-API) + [circular-natal-horoscope-js](https://www.npmjs.com/package/circular-natal-horoscope-js) |
 | 💭 **梦境解析** | AI专业prompt+符号数据库 | ✅ 100% | [dream-interpretation](https://github.com/zyaproxy-Jun/dream-interpretation) |
 | 🎋 **八字命理** | 四柱八字，五行十神分析 | ✅ 100% | [lunar-javascript](https://github.com/zyaproxy-Jun/lunar-javascript) |

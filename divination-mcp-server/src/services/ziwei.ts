@@ -1,6 +1,16 @@
 /**
  * Zi Wei Dou Shu (紫微斗数) Service
  * Chinese Purple Star Astrology
+ * 
+ * Official Source: https://github.com/zyaproxy-Jun/iztro
+ * - Lightweight astrolabe kit for Zi Wei Dou Shu
+ * - Multi-language support for Chinese Purple Star Astrology
+ * 
+ * Original Library: iztro by SylarLong
+ * Fork Repository: https://github.com/zyaproxy-Jun/iztro
+ * 
+ * @see {@link https://github.com/zyaproxy-Jun/iztro|iztro Source}
+ * @see {@link https://github.com/SylarLong/iztro|Original iztro}
  */
 
 import { astro } from 'iztro';
