@@ -632,30 +632,30 @@
             loadingDiv.className = show ? 'loading show' : 'loading';
         }
 
-        // 模拟 MCP 调用（实际环境中需要通过 MCP SDK 调用）
-        async function mockMCPCall(toolName, args) {
-            // 注意：这是模拟调用，实际使用时需要通过 MCP 协议调用
-            // 在实际环境中，您需要配置 Claude Desktop 并通过 MCP 客户端调用
-            
-            return new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    reject(new Error(`
-⚠️ 这是一个静态演示页面
+        // 调用 MCP API（通过后端代理）
+        async function callMCPAPI(toolName, args) {
+            try {
+                const response = await fetch('/api/divination', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        tool: toolName,
+                        args: args
+                    })
+                });
 
-要实际运行占卜功能，请：
-1. 确保已安装并构建项目：npm install && npm run build
-2. 配置 Claude Desktop 的 MCP 服务器
-3. 在 Claude Desktop 中使用占卜功能
-
-或者使用命令行测试：
-node quick-test.js
-
-调用参数：
-Tool: ${toolName}
-Args: ${JSON.stringify(args, null, 2)}
-                    `));
-                }, 1500);
-            });
+                const data = await response.json();
+                
+                if (data.success) {
+                    return JSON.parse(data.result);
+                } else {
+                    throw new Error(data.error || '调用失败');
+                }
+            } catch (error) {
+                throw new Error(`API 调用失败: ${error.message}`);
+            }
         }
 
         // 塔罗占卜
@@ -673,7 +673,7 @@ Args: ${JSON.stringify(args, null, 2)}
             document.getElementById('tarot-result').classList.remove('show');
 
             try {
-                const result = await mockMCPCall('tarot_reading', {
+                const result = await callMCPAPI('tarot_reading', {
                     spread_type: spread,
                     question: question,
                     language: language
@@ -702,7 +702,7 @@ Args: ${JSON.stringify(args, null, 2)}
             document.getElementById('ziwei-result').classList.remove('show');
 
             try {
-                const result = await mockMCPCall('ziwei_chart', {
+                const result = await callMCPAPI('ziwei_chart', {
                     solar_date: date,
                     birth_hour: parseInt(hour),
                     gender: gender,
@@ -734,7 +734,7 @@ Args: ${JSON.stringify(args, null, 2)}
             document.getElementById('astro-result').classList.remove('show');
 
             try {
-                const result = await mockMCPCall('birth_chart', {
+                const result = await callMCPAPI('birth_chart', {
                     date: date,
                     time: time,
                     latitude: parseFloat(lat),
@@ -767,7 +767,7 @@ Args: ${JSON.stringify(args, null, 2)}
 
             try {
                 const emotionList = emotions.split(',').map(e => e.trim()).filter(e => e);
-                const result = await mockMCPCall('interpret_dream', {
+                const result = await callMCPAPI('interpret_dream', {
                     dream_description: description,
                     emotions: emotionList,
                     recurring: recurring,
@@ -797,7 +797,7 @@ Args: ${JSON.stringify(args, null, 2)}
             document.getElementById('bazi-result').classList.remove('show');
 
             try {
-                const result = await mockMCPCall('bazi_analysis', {
+                const result = await callMCPAPI('bazi_analysis', {
                     solar_date: date,
                     birth_hour: parseInt(hour),
                     gender: gender,
@@ -826,7 +826,7 @@ Args: ${JSON.stringify(args, null, 2)}
             document.getElementById('iching-result').classList.remove('show');
 
             try {
-                const result = await mockMCPCall('iching_divination', {
+                const result = await callMCPAPI('iching_divination', {
                     question: question,
                     method: method,
                     language: language
@@ -842,8 +842,8 @@ Args: ${JSON.stringify(args, null, 2)}
         // 页面加载完成提示
         window.addEventListener('load', function() {
             console.log('🔮 综合占卜系统测试页面已加载');
-            console.log('📝 注意：这是一个静态演示页面');
-            console.log('✅ 要实际运行，请配置 Claude Desktop 的 MCP 服务器');
+            console.log('✅ 现在可以实际测试所有占卜功能');
+            console.log('📡 通过后端 API 调用 MCP 服务器');
         });
     </script>
 </body>

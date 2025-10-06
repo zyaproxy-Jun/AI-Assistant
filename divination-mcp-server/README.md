@@ -30,11 +30,14 @@ npm run build
 
 ## 🌐 Web Testing Interface
 
-We provide a beautiful web interface to test all divination features!
+We provide a **fully functional** web interface to test all divination features!
 
 ### Quick Start
 
 ```bash
+# Install and build
+npm install && npm run build
+
 # Start the test server
 node web-server.js
 
@@ -46,13 +49,23 @@ http://localhost:3000
 
 ✨ **Responsive Design** - Works on desktop and mobile  
 ✨ **6 Divination Systems** - Separate tabs for each  
-✨ **Complete Forms** - All parameters clearly displayed  
-✨ **Live Preview** - Beautiful loading animations  
+✨ **Real MCP Integration** - Actually calls and tests divination functions  
+✨ **Live Results** - Get real divination results instantly  
+✨ **Beautiful UI** - Purple gradient theme with smooth animations  
 ✨ **Source Links** - Data sources for each system  
 
-See [WEB_TESTING_GUIDE.md](WEB_TESTING_GUIDE.md) for more details.
+### Supported Systems
 
-⚠️ **Note**: The web interface is for demonstration only. Actual divination requires calling through Claude Desktop's MCP protocol.
+| System | Icon | Description |
+|--------|------|-------------|
+| Tarot Reading | 🃏 | 78-card deck with multiple spreads |
+| Zi Wei Dou Shu | ⭐ | Chinese purple star astrology |
+| Western Astrology | 🌌 | Professional birth chart calculation |
+| Dream Interpretation | 💭 | AI-powered psychological analysis |
+| BaZi Analysis | 🎋 | Four pillars Chinese destiny |
+| I-Ching | ☯️ | Book of Changes divination |
+
+See [WEB_TEST_GUIDE.md](WEB_TEST_GUIDE.md) for detailed instructions.
 
 ---
 
