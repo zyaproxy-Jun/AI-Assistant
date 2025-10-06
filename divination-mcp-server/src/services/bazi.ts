@@ -1,6 +1,27 @@
 /**
  * BaZi (八字) Service
- * Four Pillars of Destiny calculation and analysis
+ * 
+ * Official Source: https://github.com/zyaproxy-Jun/lunar-javascript
+ * - Professional Chinese calendar and BaZi calculation library
+ * - Supports Solar/Lunar calendar conversion
+ * - Complete Four Pillars (八字) calculation
+ * - Five Elements (五行) and Ten Gods (十神) analysis
+ * - Traditional Chinese astrology and almanac
+ * 
+ * Features:
+ * - Heavenly Stems (天干) and Earthly Branches (地支)
+ * - Year/Month/Day/Hour Pillars calculation
+ * - Five Elements distribution analysis
+ * - Yin-Yang balance assessment
+ * - Traditional interpretation system
+ * 
+ * Original Library: lunar-javascript by 6tail
+ * Fork Repository: https://github.com/zyaproxy-Jun/lunar-javascript
+ * 
+ * License: MIT
+ * 
+ * @see {@link https://github.com/zyaproxy-Jun/lunar-javascript|lunar-javascript Source}
+ * @see {@link https://github.com/6tail/lunar-javascript|Original lunar-javascript}
  */
 
 // @ts-ignore
