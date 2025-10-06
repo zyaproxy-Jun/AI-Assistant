@@ -10,10 +10,16 @@ This MCP server provides tools for:
    - Based on [tarotcardapi](https://github.com/zyaproxy-Jun/tarotcardapi) by Kushagra Srivastava
    - Complete 78-card deck with detailed English descriptions
 2. **紫微斗数 (Zi Wei Dou Shu)** - Chinese Purple Star Astrology chart generation
-3. **西洋占星 (Western Astrology)** - Birth chart calculation and interpretation
+   - Using [iztro](https://github.com/SylarLong/iztro) library
+3. **西洋占星 (Western Astrology)** - Professional birth chart calculation with Swiss Ephemeris principles
+   - Based on [Astrologer-API](https://github.com/zyaproxy-Jun/Astrologer-API) methodology
+   - Using [circular-natal-horoscope-js](https://www.npmjs.com/package/circular-natal-horoscope-js) for accurate astronomical calculations
 4. **梦境解析 (Dream Interpretation)** - AI-powered dream analysis with psychological insights
+   - Based on [dream-interpretation](https://github.com/zyaproxy-Jun/dream-interpretation) framework
 5. **八字命理 (BaZi/Four Pillars)** - Chinese destiny analysis based on birth time
+   - Using [lunar-javascript](https://github.com/6tail/lunar-javascript) library
 6. **易经卜卦 (I-Ching)** - Book of Changes divination with hexagram interpretation (complete 64 hexagrams)
+   - Based on [i-ching.el](https://github.com/zyaproxy-Jun/i-ching) data
 
 ## Installation
 
@@ -154,9 +160,11 @@ npm start
 
 This project integrates methods and knowledge from:
 - **Tarot**: Complete 78-card data from [tarotcardapi](https://github.com/zyaproxy-Jun/tarotcardapi) by Kushagra Srivastava (MIT License)
-- **Zi Wei Dou Shu**: Based on iztro library (https://github.com/SylarLong/iztro)
-- **Western Astrology**: Traditional Western astrology principles
+- **Zi Wei Dou Shu**: Based on [iztro](https://github.com/SylarLong/iztro) library (MIT License)
+- **Western Astrology**: Professional calculations inspired by [Astrologer-API](https://github.com/zyaproxy-Jun/Astrologer-API) (MIT License), using [circular-natal-horoscope-js](https://www.npmjs.com/package/circular-natal-horoscope-js) (Unlicense) for Swiss Ephemeris-based astronomical calculations
 - **Dream Analysis**: Professional prompt engineering from [dream-interpretation](https://github.com/zyaproxy-Jun/dream-interpretation) by zyaproxy-Jun
+- **BaZi**: Using [lunar-javascript](https://github.com/6tail/lunar-javascript) library (MIT License)
+- **I-Ching**: Complete 64 hexagrams data from [i-ching.el](https://github.com/zyaproxy-Jun/i-ching) (GPL-3.0)
   - AI-powered structured analysis framework
   - Multi-dimensional interpretation (Symbols, Culture, Psychology, Reality)
   - 10+ language support with cultural adaptation

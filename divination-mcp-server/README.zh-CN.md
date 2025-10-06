@@ -25,7 +25,7 @@
 |---------|------|--------|---------|
 | 🃏 **塔罗占卜** | 78张完整塔罗牌，5种牌阵 | ✅ 100% | [tarotcardapi](https://github.com/zyaproxy-Jun/tarotcardapi) |
 | ⭐ **紫微斗数** | 中国传统命理学，十二宫位分析 | ✅ 100% | [iztro](https://github.com/SylarLong/iztro) |
-| 🌌 **西洋占星** | 出生星盘，行星相位分析 | ⚠️ 80% | 传统占星学 |
+| 🌌 **西洋占星** | 出生星盘，行星相位分析 | ✅ 100% | [Astrologer-API](https://github.com/zyaproxy-Jun/Astrologer-API) + [circular-natal-horoscope-js](https://www.npmjs.com/package/circular-natal-horoscope-js) |
 | 💭 **梦境解析** | AI专业prompt+符号数据库 | ✅ 100% | [dream-interpretation](https://github.com/zyaproxy-Jun/dream-interpretation) |
 | 🎋 **八字命理** | 四柱八字，五行十神分析 | ✅ 100% | [lunar-javascript](https://github.com/6tail/lunar-javascript) |
 | ☯️ **易经卜卦** | 完整64卦，三种起卦方法 | ✅ 100% | 周易原文+[i-ching.el](https://github.com/zyaproxy-Jun/i-ching) |
@@ -235,12 +235,12 @@ divination-mcp-server/
 |------|------|------|
 | 塔罗牌数据 | ✅ | 78张完整卡牌 |
 | 紫微斗数 | ✅ | 集成iztro库 |
-| 西洋占星 | ⚠️ | 使用简化算法 |
+| 西洋占星 | ✅ | Swiss Ephemeris专业计算 |
 | 梦境符号 | ✅ | 100+符号字典 |
 | 八字算法 | ✅ | 完整四柱计算 |
 | 易经卦象 | ✅ | 完整64卦数据 |
 
-**整体完成度：97%**
+**整体完成度：100%** ✅
 
 ---
 
