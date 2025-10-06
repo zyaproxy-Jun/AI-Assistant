@@ -1,0 +1,14 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schema/config.json",
+  "mcpServers": {
+    "divination": {
+      "command": "node",
+      "args": [
+        "/workspaces/AI-Assistant/divination-mcp-server/dist/index.js"
+      ],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  }
+}
