@@ -28,6 +28,34 @@ npm install
 npm run build
 ```
 
+## 🌐 Web Testing Interface
+
+We provide a beautiful web interface to test all divination features!
+
+### Quick Start
+
+```bash
+# Start the test server
+node web-server.js
+
+# Open in browser
+http://localhost:3000
+```
+
+### Features
+
+✨ **Responsive Design** - Works on desktop and mobile  
+✨ **6 Divination Systems** - Separate tabs for each  
+✨ **Complete Forms** - All parameters clearly displayed  
+✨ **Live Preview** - Beautiful loading animations  
+✨ **Source Links** - Data sources for each system  
+
+See [WEB_TESTING_GUIDE.md](WEB_TESTING_GUIDE.md) for more details.
+
+⚠️ **Note**: The web interface is for demonstration only. Actual divination requires calling through Claude Desktop's MCP protocol.
+
+---
+
 ## Configuration
 
 ### Environment Variables

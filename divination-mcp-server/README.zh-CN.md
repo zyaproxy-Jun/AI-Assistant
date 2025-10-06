@@ -69,7 +69,26 @@ npm install
 npm run build
 ```
 
-4. **配置 Claude Desktop**
+4. **测试功能（可选）**
+
+**方式1：网页测试界面** 🌟
+```bash
+# 启动网页测试服务器
+node web-server.js
+
+# 或使用快捷脚本
+./start-web-test.sh
+
+# 浏览器访问
+http://localhost:3000
+```
+
+**方式2：命令行测试**
+```bash
+node quick-test.js
+```
+
+5. **配置 Claude Desktop**
 
 编辑 Claude Desktop 配置文件：
 - macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
@@ -89,6 +108,36 @@ npm run build
 ```
 
 5. **重启 Claude Desktop**
+
+---
+
+## 🌐 网页测试界面
+
+我们提供了一个美观的网页界面来测试所有占卜功能！
+
+### 快速启动
+
+```bash
+# 启动测试服务器
+node web-server.js
+
+# 浏览器访问
+http://localhost:3000
+```
+
+### 功能特点
+
+✨ **响应式设计** - 支持桌面和移动设备  
+✨ **6个占卜系统** - 独立标签页展示  
+✨ **完整表单** - 所有参数一目了然  
+✨ **实时预览** - 美观的加载动画  
+✨ **源码链接** - 每个系统都标注了数据来源  
+
+### 详细文档
+
+查看 [WEB_TESTING_GUIDE.md](WEB_TESTING_GUIDE.md) 了解更多信息。
+
+⚠️ **注意**: 网页界面仅用于演示和参数展示，实际占卜需要通过 Claude Desktop 的 MCP 协议调用。
 
 ---
 
