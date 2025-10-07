@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔮 综合占卜系统 - Divination MCP Server</title>
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --border: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            color: white;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .header p {
+            font-size: 1.3em;
+            opacity: 0.95;
+            margin-bottom: 10px;
+        }
+
+        .header .status {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            font-size: 0.9em;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Main Card */
+        .main-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            background: var(--light);
+            border-bottom: 2px solid var(--border);
+        }
+
+        .tab-button {
+            padding: 20px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            color: #6b7280;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tab-button:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--primary);
+        }
+
+        .tab-button.active {
+            color: var(--primary);
+            background: white;
+            border-bottom-color: var(--primary);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            padding: 40px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.95em;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        /* Button */
+        .btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        /* Loading */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        /* Result */
+        .result {
+            display: none;
+            padding: 30px;
+            background: var(--light);
+            border-radius: 15px;
+            margin-top: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .result.active {
+            display: block;
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .result-header h3 {
+            font-size: 1.5em;
+            color: var(--dark);
+        }
+
+        .result-body {
+            line-height: 1.8;
+        }
+
+        .result-body pre {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            font-size: 0.9em;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-info {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #1e40af;
+        }
+
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #92400e;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #065f46;
+        }
+
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #991b1b;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .stat-card .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .stat-card .label {
+            font-size: 0.9em;
+            color: #6b7280;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: white;
+            padding: 30px 20px;
+            margin-top: 40px;
+            opacity: 0.9;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: underline;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+                flex-direction: column;
+            }
+
+            .tabs {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .tab-content {
+                padding: 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Icon styles */
+        .icon {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>
+                <span>🔮</span>
+                <span>综合占卜系统</span>
+            </h1>
+            <p>Divination MCP Server - 前端测试界面</p>
+            <div class="status">
+                <span id="server-status">🟢 服务器运行中</span>
+            </div>
+        </div>
+
+        <!-- Main Card -->
+        <div class="main-card">
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-button active" onclick="switchTab('tarot')">
+                    <span class="icon">🃏</span> 塔罗占卜
+                </button>
+                <button class="tab-button" onclick="switchTab('ziwei')">
+                    <span class="icon">⭐</span> 紫微斗数
+                </button>
+                <button class="tab-button" onclick="switchTab('astrology')">
+                    <span class="icon">🌌</span> 西洋占星
+                </button>
+                <button class="tab-button" onclick="switchTab('dream')">
+                    <span class="icon">💭</span> 梦境解析
+                </button>
+                <button class="tab-button" onclick="switchTab('bazi')">
+                    <span class="icon">☯️</span> 八字命理
+                </button>
+                <button class="tab-button" onclick="switchTab('iching')">
+                    <span class="icon">📿</span> 易经卜卦
+                </button>
+            </div>
+
+            <!-- Tab Contents -->
+            
+            <!-- Tarot Reading -->
+            <div id="tarot" class="tab-content active">
+                <div class="alert alert-info">
+                    <span>ℹ️</span>
+                    <span>塔罗占卜支持单张牌、三张牌和五张牌阵，可以解答各种问题。</span>
+                </div>
+
+                <form onsubmit="testTarot(event)">
+                    <div class="form-group">
+                        <label for="tarot-spread">牌阵类型</label>
+                        <select id="tarot-spread" required>
+                            <option value="single">单张牌 (快速占卜)</option>
+                            <option value="three_card">三张牌 (过去-现在-未来)</option>
+                            <option value="five_card">五张牌 (详细分析)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tarot-question">您的问题</label>
+                        <textarea id="tarot-question" placeholder="例如：我的事业发展如何？" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <span>🔮</span> 开始占卜
+                    </button>
+                </form>
+
+                <div id="tarot-loading" class="loading">
+                    <div class="spinner"></div>
+                    <p>正在抽取塔罗牌...</p>
+                </div>
+
+                <div id="tarot-result" class="result"></div>
+            </div>
+
+            <!-- Ziwei Chart -->
+            <div id="ziwei" class="tab-content">
+                <div class="alert alert-info">
+                    <span>ℹ️</span>
+                    <span>紫微斗数是中国传统命理学，需要准确的出生日期和时辰。</span>
+                </div>
+
+                <form onsubmit="testZiwei(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="ziwei-date">出生日期</label>
+                            <input type="date" id="ziwei-date" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ziwei-hour">出生时辰 (24小时制)</label>
+                            <input type="number" id="ziwei-hour" min="0" max="23" placeholder="14" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ziwei-gender">性别</label>
+                            <select id="ziwei-gender" required>
+                                <option value="男">男</option>
+                                <option value="女">女</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <span>⭐</span> 生成命盘
+                    </button>
+                </form>
+
+                <div id="ziwei-loading" class="loading">
+                    <div class="spinner"></div>
+                    <p>正在计算紫微命盘...</p>
+                </div>
+
+                <div id="ziwei-result" class="result"></div>
+            </div>
+
+            <!-- Astrology -->
+            <div id="astrology" class="tab-content">
+                <div class="alert alert-warning">
+                    <span>⚠️</span>
+                    <span>西洋占星功能使用 Fallback 模式。配置真实 API 可获得专业级星盘。</span>
+                </div>
+
+                <form onsubmit="testAstrology(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="astro-date">出生日期</label>
+                            <input type="date" id="astro-date" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="astro-time">出生时间</label>
+                            <input type="time" id="astro-time" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="astro-lat">纬度</label>
+                            <input type="number" id="astro-lat" step="0.0001" placeholder="39.9042" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="astro-lng">经度</label>
+                            <input type="number" id="astro-lng" step="0.0001" placeholder="116.4074" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="astro-timezone">时区</label>
+                        <input type="text" id="astro-timezone" placeholder="Asia/Shanghai" value="Asia/Shanghai" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <span>🌌</span> 生成星盘
+                    </button>
+                </form>
+
+                <div id="astrology-loading" class="loading">
+                    <div class="spinner"></div>
+                    <p>正在计算星盘...</p>
+                </div>
+
+                <div id="astrology-result" class="result"></div>
+            </div>
+
+            <!-- Dream Interpretation -->
+            <div id="dream" class="tab-content">
+                <div class="alert alert-info">
+                    <span>ℹ️</span>
+                    <span>梦境解析使用 AI 技术分析您的梦境含义和象征。</span>
+                </div>
+
+                <form onsubmit="testDream(event)">
+                    <div class="form-group">
+                        <label for="dream-description">梦境描述</label>
+                        <textarea id="dream-description" placeholder="请详细描述您的梦境..." rows="6" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <span>💭</span> 解析梦境
+                    </button>
+                </form>
+
+                <div id="dream-loading" class="loading">
+                    <div class="spinner"></div>
+                    <p>AI 正在分析梦境...</p>
+                </div>
+
+                <div id="dream-result" class="result"></div>
+            </div>
+
+            <!-- Bazi Analysis -->
+            <div id="bazi" class="tab-content">
+                <div class="alert alert-info">
+                    <span>ℹ️</span>
+                    <span>八字命理根据出生年月日时推算命运和性格特征。</span>
+                </div>
+
+                <form onsubmit="testBazi(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bazi-date">出生日期</label>
+                            <input type="date" id="bazi-date" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bazi-hour">出生时辰 (24小时制)</label>
+                            <input type="number" id="bazi-hour" min="0" max="23" placeholder="14" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <span>☯️</span> 推算八字
+                    </button>
+                </form>
+
+                <div id="bazi-loading" class="loading">
+                    <div class="spinner"></div>
+                    <p>正在推算八字...</p>
+                </div>
+
+                <div id="bazi-result" class="result"></div>
+            </div>
+
+            <!-- I Ching -->
+            <div id="iching" class="tab-content">
+                <div class="alert alert-info">
+                    <span>ℹ️</span>
+                    <span>易经卜卦是中国最古老的占卜方法，可以指引人生决策。</span>
+                </div>
+
+                <form onsubmit="testIching(event)">
+                    <div class="form-group">
+                        <label for="iching-question">您的问题</label>
+                        <textarea id="iching-question" placeholder="例如：这个项目是否值得投资？" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <span>📿</span> 开始卜卦
+                    </button>
+                </form>
+
+                <div id="iching-loading" class="loading">
+                    <div class="spinner"></div>
+                    <p>正在生成卦象...</p>
+                </div>
+
+                <div id="iching-result" class="result"></div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="value" id="stat-total">0</div>
+                <div class="label">总测试次数</div>
+            </div>
+            <div class="stat-card">
+                <div class="value" id="stat-success">0</div>
+                <div class="label">成功次数</div>
+            </div>
+            <div class="stat-card">
+                <div class="value" id="stat-time">0ms</div>
+                <div class="label">平均响应时间</div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>🔮 综合占卜系统 MCP Server v1.0.1</p>
+            <p>
+                <a href="https://github.com/zyaproxy-Jun/AI-Assistant" target="_blank">
+                    GitHub 项目地址
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let stats = {
+            total: 0,
+            success: 0,
+            totalTime: 0
+        };
+
+        // Switch tabs
+        function switchTab(tabName) {
+            // Update buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.closest('.tab-button').classList.add('active');
+
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // Update statistics
+        function updateStats(success, time) {
+            stats.total++;
+            if (success) stats.success++;
+            if (time) stats.totalTime += time;
+
+            document.getElementById('stat-total').textContent = stats.total;
+            document.getElementById('stat-success').textContent = stats.success;
+            
+            if (stats.success > 0) {
+                const avgTime = Math.round(stats.totalTime / stats.success);
+                document.getElementById('stat-time').textContent = avgTime + 'ms';
+            }
+        }
+
+        // Show loading
+        function showLoading(system) {
+            document.getElementById(`${system}-loading`).classList.add('active');
+            document.getElementById(`${system}-result`).classList.remove('active');
+        }
+
+        // Hide loading
+        function hideLoading(system) {
+            document.getElementById(`${system}-loading`).classList.remove('active');
+        }
+
+        // Show result
+        function showResult(system, title, content, isSuccess = true) {
+            hideLoading(system);
+            
+            const resultDiv = document.getElementById(`${system}-result`);
+            const alertClass = isSuccess ? 'alert-success' : 'alert-danger';
+            const icon = isSuccess ? '✅' : '❌';
+            
+            resultDiv.innerHTML = `
+                <div class="result-header">
+                    <span style="font-size: 1.5em;">${icon}</span>
+                    <h3>${title}</h3>
+                </div>
+                <div class="result-body">
+                    <pre>${content}</pre>
+                </div>
+            `;
+            resultDiv.classList.add('active');
+        }
+
+        // Test Tarot
+        async function testTarot(event) {
+            event.preventDefault();
+            showLoading('tarot');
+
+            const spreadType = document.getElementById('tarot-spread').value;
+            const question = document.getElementById('tarot-question').value;
+
+            const startTime = Date.now();
+
+            try {
+                const response = await fetch('/api/tarot', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ spread_type: spreadType, question })
+                });
+
+                const data = await response.json();
+                const time = Date.now() - startTime;
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                updateStats(true, time);
+                showResult('tarot', '🃏 塔罗占卜结果', JSON.stringify(data, null, 2), true);
+            } catch (error) {
+                updateStats(false, 0);
+                showResult('tarot', '❌ 占卜失败', error.message, false);
+            }
+        }
+
+        // Test Ziwei
+        async function testZiwei(event) {
+            event.preventDefault();
+            showLoading('ziwei');
+
+            const date = document.getElementById('ziwei-date').value;
+            const hour = parseInt(document.getElementById('ziwei-hour').value);
+            const gender = document.getElementById('ziwei-gender').value;
+
+            const startTime = Date.now();
+
+            try {
+                const response = await fetch('/api/ziwei', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ solar_date: date, birth_hour: hour, gender })
+                });
+
+                const data = await response.json();
+                const time = Date.now() - startTime;
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                updateStats(true, time);
+                showResult('ziwei', '⭐ 紫微斗数命盘', JSON.stringify(data, null, 2), true);
+            } catch (error) {
+                updateStats(false, 0);
+                showResult('ziwei', '❌ 生成失败', error.message, false);
+            }
+        }
+
+        // Test Astrology
+        async function testAstrology(event) {
+            event.preventDefault();
+            showLoading('astrology');
+
+            const date = document.getElementById('astro-date').value;
+            const time = document.getElementById('astro-time').value;
+            const lat = parseFloat(document.getElementById('astro-lat').value);
+            const lng = parseFloat(document.getElementById('astro-lng').value);
+            const timezone = document.getElementById('astro-timezone').value;
+
+            const startTime = Date.now();
+
+            try {
+                const response = await fetch('/api/astrology', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        birth_date: date,
+                        birth_time: time,
+                        latitude: lat,
+                        longitude: lng,
+                        timezone
+                    })
+                });
+
+                const data = await response.json();
+                const timeElapsed = Date.now() - startTime;
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                updateStats(true, timeElapsed);
+                showResult('astrology', '🌌 西洋占星星盘', JSON.stringify(data, null, 2), true);
+            } catch (error) {
+                updateStats(false, 0);
+                showResult('astrology', '❌ 生成失败', error.message, false);
+            }
+        }
+
+        // Test Dream
+        async function testDream(event) {
+            event.preventDefault();
+            showLoading('dream');
+
+            const description = document.getElementById('dream-description').value;
+
+            const startTime = Date.now();
+
+            try {
+                const response = await fetch('/api/dream', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ dream_description: description })
+                });
+
+                const data = await response.json();
+                const time = Date.now() - startTime;
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                updateStats(true, time);
+                showResult('dream', '💭 梦境解析结果', JSON.stringify(data, null, 2), true);
+            } catch (error) {
+                updateStats(false, 0);
+                showResult('dream', '❌ 解析失败', error.message, false);
+            }
+        }
+
+        // Test Bazi
+        async function testBazi(event) {
+            event.preventDefault();
+            showLoading('bazi');
+
+            const date = document.getElementById('bazi-date').value;
+            const hour = parseInt(document.getElementById('bazi-hour').value);
+
+            const startTime = Date.now();
+
+            try {
+                const response = await fetch('/api/bazi', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ solar_date: date, birth_hour: hour })
+                });
+
+                const data = await response.json();
+                const time = Date.now() - startTime;
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                updateStats(true, time);
+                showResult('bazi', '☯️ 八字命理分析', JSON.stringify(data, null, 2), true);
+            } catch (error) {
+                updateStats(false, 0);
+                showResult('bazi', '❌ 推算失败', error.message, false);
+            }
+        }
+
+        // Test I Ching
+        async function testIching(event) {
+            event.preventDefault();
+            showLoading('iching');
+
+            const question = document.getElementById('iching-question').value;
+
+            const startTime = Date.now();
+
+            try {
+                const response = await fetch('/api/iching', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question })
+                });
+
+                const data = await response.json();
+                const time = Date.now() - startTime;
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                updateStats(true, time);
+                showResult('iching', '📿 易经卦象', JSON.stringify(data, null, 2), true);
+            } catch (error) {
+                updateStats(false, 0);
+                showResult('iching', '❌ 卜卦失败', error.message, false);
+            }
+        }
+
+        // Check server status
+        async function checkServerStatus() {
+            try {
+                const response = await fetch('/health');
+                if (response.ok) {
+                    document.getElementById('server-status').innerHTML = '🟢 服务器运行中';
+                } else {
+                    throw new Error('Server not responding');
+                }
+            } catch (error) {
+                document.getElementById('server-status').innerHTML = '🔴 服务器离线';
+            }
+        }
+
+        // Initialize
+        checkServerStatus();
+        setInterval(checkServerStatus, 30000); // Check every 30 seconds
+    </script>
+</body>
+</html>

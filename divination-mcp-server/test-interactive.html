@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔮 综合占卜系统 - 交互式测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f9fafb;
+            border-bottom: 2px solid #e5e7eb;
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            padding: 18px 24px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            color: #6b7280;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab-button:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .tab-button.active {
+            color: #667eea;
+            background: white;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result-box {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f9fafb;
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+            display: none;
+        }
+
+        .result-box.show {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        .result-box h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .result-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e5e7eb;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            border: 1px solid #3b82f6;
+            color: #1e40af;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            color: #92400e;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            border: 1px solid #ef4444;
+            color: #991b1b;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .example-btn {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #e5e7eb;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.85em;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: all 0.3s;
+        }
+
+        .example-btn:hover {
+            background: #d1d5db;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔮 综合占卜系统</h1>
+            <p>交互式功能测试 - 实时调用 MCP Server</p>
+        </div>
+
+        <div class="main-card">
+            <div class="tabs">
+                <button class="tab-button active" data-tab="tarot">🃏 塔罗占卜</button>
+                <button class="tab-button" data-tab="ziwei">⭐ 紫微斗数</button>
+                <button class="tab-button" data-tab="astrology">🌌 西洋占星</button>
+                <button class="tab-button" data-tab="dream">💭 梦境解析</button>
+                <button class="tab-button" data-tab="bazi">🎋 八字命理</button>
+                <button class="tab-button" data-tab="iching">☯️ 易经占卜</button>
+            </div>
+
+            <!-- 塔罗占卜 -->
+            <div id="tarot" class="tab-content active">
+                <div class="alert alert-info">
+                    💡 塔罗占卜使用78张完整塔罗牌，支持过去、现在、未来三张牌阵
+                </div>
+                <form id="tarot-form">
+                    <div class="form-group">
+                        <label>占卜问题：
+                            <button type="button" class="example-btn" onclick="fillTarotExample()">填充示例</button>
+                        </label>
+                        <textarea id="tarot-question" placeholder="请输入你想咨询的问题..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn">🔮 开始占卜</button>
+                </form>
+                <div class="loading" id="tarot-loading">
+                    <div class="spinner"></div>
+                    <p>正在为您占卜...</p>
+                </div>
+                <div class="result-box" id="tarot-result">
+                    <h3>📜 占卜结果</h3>
+                    <div class="result-content" id="tarot-content"></div>
+                </div>
+            </div>
+
+            <!-- 紫微斗数 -->
+            <div id="ziwei" class="tab-content">
+                <div class="alert alert-info">
+                    💡 紫微斗数是中国传统命理学，需要准确的出生时间
+                </div>
+                <form id="ziwei-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>出生年份：</label>
+                            <input type="number" id="ziwei-year" min="1900" max="2100" placeholder="1990" required>
+                        </div>
+                        <div class="form-group">
+                            <label>出生月份：</label>
+                            <input type="number" id="ziwei-month" min="1" max="12" placeholder="5" required>
+                        </div>
+                        <div class="form-group">
+                            <label>出生日期：</label>
+                            <input type="number" id="ziwei-day" min="1" max="31" placeholder="15" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>出生时辰：</label>
+                            <select id="ziwei-hour" required>
+                                <option value="">请选择时辰</option>
+                                <option value="0">子时 (23:00-01:00)</option>
+                                <option value="1">丑时 (01:00-03:00)</option>
+                                <option value="2">寅时 (03:00-05:00)</option>
+                                <option value="3">卯时 (05:00-07:00)</option>
+                                <option value="4">辰时 (07:00-09:00)</option>
+                                <option value="5">巳时 (09:00-11:00)</option>
+                                <option value="6">午时 (11:00-13:00)</option>
+                                <option value="7">未时 (13:00-15:00)</option>
+                                <option value="8">申时 (15:00-17:00)</option>
+                                <option value="9">酉时 (17:00-19:00)</option>
+                                <option value="10">戌时 (19:00-21:00)</option>
+                                <option value="11">亥时 (21:00-23:00)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>性别：</label>
+                            <select id="ziwei-gender" required>
+                                <option value="">请选择</option>
+                                <option value="1">男</option>
+                                <option value="0">女</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="button" class="example-btn" onclick="fillZiweiExample()" style="margin-bottom: 10px;">填充示例数据</button>
+                    <button type="submit" class="btn">⭐ 开始排盘</button>
+                </form>
+                <div class="loading" id="ziwei-loading">
+                    <div class="spinner"></div>
+                    <p>正在排盘计算...</p>
+                </div>
+                <div class="result-box" id="ziwei-result">
+                    <h3>📊 命盘结果</h3>
+                    <div class="result-content" id="ziwei-content"></div>
+                </div>
+            </div>
+
+            <!-- 西洋占星 -->
+            <div id="astrology" class="tab-content">
+                <div class="alert alert-info">
+                    💡 西洋占星需要精确的出生时间和地点，会计算本命盘
+                </div>
+                <form id="astrology-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>出生年份：</label>
+                            <input type="number" id="astro-year" min="1900" max="2100" placeholder="1990" required>
+                        </div>
+                        <div class="form-group">
+                            <label>出生月份：</label>
+                            <input type="number" id="astro-month" min="1" max="12" placeholder="5" required>
+                        </div>
+                        <div class="form-group">
+                            <label>出生日期：</label>
+                            <input type="number" id="astro-day" min="1" max="31" placeholder="15" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>出生时（24小时制）：</label>
+                            <input type="number" id="astro-hour" min="0" max="23" placeholder="14" required>
+                        </div>
+                        <div class="form-group">
+                            <label>出生分：</label>
+                            <input type="number" id="astro-minute" min="0" max="59" placeholder="30" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>出生地纬度：</label>
+                            <input type="number" id="astro-lat" step="0.01" placeholder="39.9042" required>
+                        </div>
+                        <div class="form-group">
+                            <label>出生地经度：</label>
+                            <input type="number" id="astro-lon" step="0.01" placeholder="116.4074" required>
+                        </div>
+                    </div>
+                    <button type="button" class="example-btn" onclick="fillAstrologyExample()" style="margin-bottom: 10px;">填充示例（北京）</button>
+                    <button type="submit" class="btn">🌌 生成星盘</button>
+                </form>
+                <div class="loading" id="astrology-loading">
+                    <div class="spinner"></div>
+                    <p>正在计算星盘...</p>
+                </div>
+                <div class="result-box" id="astrology-result">
+                    <h3>🌟 星盘结果</h3>
+                    <div class="result-content" id="astrology-content"></div>
+                </div>
+            </div>
+
+            <!-- 梦境解析 -->
+            <div id="dream" class="tab-content">
+                <div class="alert alert-info">
+                    💡 梦境解析基于心理学理论，帮助您理解梦境的深层含义
+                </div>
+                <form id="dream-form">
+                    <div class="form-group">
+                        <label>梦境描述：
+                            <button type="button" class="example-btn" onclick="fillDreamExample()">填充示例</button>
+                        </label>
+                        <textarea id="dream-description" placeholder="请详细描述你的梦境..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn">💭 解析梦境</button>
+                </form>
+                <div class="loading" id="dream-loading">
+                    <div class="spinner"></div>
+                    <p>正在分析梦境...</p>
+                </div>
+                <div class="result-box" id="dream-result">
+                    <h3>🧠 解析结果</h3>
+                    <div class="result-content" id="dream-content"></div>
+                </div>
+            </div>
+
+            <!-- 八字命理 -->
+            <div id="bazi" class="tab-content">
+                <div class="alert alert-info">
+                    💡 八字命理（四柱推算）是中国传统命理学的核心
+                </div>
+                <form id="bazi-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>出生年份：</label>
+                            <input type="number" id="bazi-year" min="1900" max="2100" placeholder="1990" required>
+                        </div>
+                        <div class="form-group">
+                            <label>出生月份：</label>
+                            <input type="number" id="bazi-month" min="1" max="12" placeholder="5" required>
+                        </div>
+                        <div class="form-group">
+                            <label>出生日期：</label>
+                            <input type="number" id="bazi-day" min="1" max="31" placeholder="15" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>出生时（24小时制）：</label>
+                            <input type="number" id="bazi-hour" min="0" max="23" placeholder="14" required>
+                        </div>
+                        <div class="form-group">
+                            <label>性别：</label>
+                            <select id="bazi-gender" required>
+                                <option value="">请选择</option>
+                                <option value="1">男</option>
+                                <option value="0">女</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="button" class="example-btn" onclick="fillBaziExample()" style="margin-bottom: 10px;">填充示例数据</button>
+                    <button type="submit" class="btn">🎋 排八字</button>
+                </form>
+                <div class="loading" id="bazi-loading">
+                    <div class="spinner"></div>
+                    <p>正在排盘...</p>
+                </div>
+                <div class="result-box" id="bazi-result">
+                    <h3>📅 八字命盘</h3>
+                    <div class="result-content" id="bazi-content"></div>
+                </div>
+            </div>
+
+            <!-- 易经占卜 -->
+            <div id="iching" class="tab-content">
+                <div class="alert alert-info">
+                    💡 易经占卜使用六十四卦系统，可选择不同卜卦方法
+                </div>
+                <form id="iching-form">
+                    <div class="form-group">
+                        <label>占卜问题：
+                            <button type="button" class="example-btn" onclick="fillIChingExample()">填充示例</button>
+                        </label>
+                        <textarea id="iching-question" placeholder="请输入你想咨询的问题..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>卜卦方法：</label>
+                        <select id="iching-method">
+                            <option value="时间起卦">时间起卦（默认）</option>
+                            <option value="铜钱卦">铜钱卦</option>
+                            <option value="数字起卦">数字起卦</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">☯️ 开始卜卦</button>
+                </form>
+                <div class="loading" id="iching-loading">
+                    <div class="spinner"></div>
+                    <p>正在卜卦...</p>
+                </div>
+                <div class="result-box" id="iching-result">
+                    <h3>📖 卦象解析</h3>
+                    <div class="result-content" id="iching-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API 基础配置
+        const API_BASE = 'http://localhost:3000';
+
+        // 标签页切换
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const tab = button.dataset.tab;
+                
+                // 更新按钮状态
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // 更新内容显示
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                document.getElementById(tab).classList.add('active');
+            });
+        });
+
+        // 通用 API 调用函数
+        async function callAPI(tool, args) {
+            const response = await fetch(`${API_BASE}/api/divination`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ tool, args })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || '调用失败');
+            }
+
+            return await response.json();
+        }
+
+        // 显示结果
+        function showResult(type, content) {
+            const resultBox = document.getElementById(`${type}-result`);
+            const resultContent = document.getElementById(`${type}-content`);
+            
+            resultContent.textContent = typeof content === 'string' ? content : JSON.stringify(content, null, 2);
+            resultBox.classList.add('show');
+        }
+
+        // 显示/隐藏加载
+        function setLoading(type, show) {
+            const loading = document.getElementById(`${type}-loading`);
+            if (show) {
+                loading.classList.add('show');
+                document.getElementById(`${type}-result`).classList.remove('show');
+            } else {
+                loading.classList.remove('show');
+            }
+        }
+
+        // 塔罗占卜
+        document.getElementById('tarot-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const question = document.getElementById('tarot-question').value;
+            
+            setLoading('tarot', true);
+            try {
+                const result = await callAPI('tarot_reading', { question });
+                showResult('tarot', result.content[0].text);
+            } catch (error) {
+                showResult('tarot', `❌ 错误: ${error.message}`);
+            } finally {
+                setLoading('tarot', false);
+            }
+        });
+
+        // 紫微斗数
+        document.getElementById('ziwei-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const args = {
+                year: parseInt(document.getElementById('ziwei-year').value),
+                month: parseInt(document.getElementById('ziwei-month').value),
+                day: parseInt(document.getElementById('ziwei-day').value),
+                hour: parseInt(document.getElementById('ziwei-hour').value),
+                gender: parseInt(document.getElementById('ziwei-gender').value)
+            };
+            
+            setLoading('ziwei', true);
+            try {
+                const result = await callAPI('ziwei_astrology', args);
+                showResult('ziwei', result.content[0].text);
+            } catch (error) {
+                showResult('ziwei', `❌ 错误: ${error.message}`);
+            } finally {
+                setLoading('ziwei', false);
+            }
+        });
+
+        // 西洋占星
+        document.getElementById('astrology-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const args = {
+                year: parseInt(document.getElementById('astro-year').value),
+                month: parseInt(document.getElementById('astro-month').value),
+                day: parseInt(document.getElementById('astro-day').value),
+                hour: parseInt(document.getElementById('astro-hour').value),
+                minute: parseInt(document.getElementById('astro-minute').value),
+                latitude: parseFloat(document.getElementById('astro-lat').value),
+                longitude: parseFloat(document.getElementById('astro-lon').value)
+            };
+            
+            setLoading('astrology', true);
+            try {
+                const result = await callAPI('birth_chart', args);
+                showResult('astrology', result.content[0].text);
+            } catch (error) {
+                showResult('astrology', `❌ 错误: ${error.message}`);
+            } finally {
+                setLoading('astrology', false);
+            }
+        });
+
+        // 梦境解析
+        document.getElementById('dream-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const description = document.getElementById('dream-description').value;
+            
+            setLoading('dream', true);
+            try {
+                const result = await callAPI('dream_interpretation', { description });
+                showResult('dream', result.content[0].text);
+            } catch (error) {
+                showResult('dream', `❌ 错误: ${error.message}`);
+            } finally {
+                setLoading('dream', false);
+            }
+        });
+
+        // 八字命理
+        document.getElementById('bazi-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const args = {
+                year: parseInt(document.getElementById('bazi-year').value),
+                month: parseInt(document.getElementById('bazi-month').value),
+                day: parseInt(document.getElementById('bazi-day').value),
+                hour: parseInt(document.getElementById('bazi-hour').value),
+                gender: parseInt(document.getElementById('bazi-gender').value)
+            };
+            
+            setLoading('bazi', true);
+            try {
+                const result = await callAPI('bazi_analysis', args);
+                showResult('bazi', result.content[0].text);
+            } catch (error) {
+                showResult('bazi', `❌ 错误: ${error.message}`);
+            } finally {
+                setLoading('bazi', false);
+            }
+        });
+
+        // 易经占卜
+        document.getElementById('iching-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const args = {
+                question: document.getElementById('iching-question').value,
+                method: document.getElementById('iching-method').value
+            };
+            
+            setLoading('iching', true);
+            try {
+                const result = await callAPI('iching_divination', args);
+                showResult('iching', result.content[0].text);
+            } catch (error) {
+                showResult('iching', `❌ 错误: ${error.message}`);
+            } finally {
+                setLoading('iching', false);
+            }
+        });
+
+        // 示例数据填充函数
+        function fillTarotExample() {
+            document.getElementById('tarot-question').value = '我的事业发展如何？';
+        }
+
+        function fillZiweiExample() {
+            document.getElementById('ziwei-year').value = '1990';
+            document.getElementById('ziwei-month').value = '5';
+            document.getElementById('ziwei-day').value = '15';
+            document.getElementById('ziwei-hour').value = '6';
+            document.getElementById('ziwei-gender').value = '1';
+        }
+
+        function fillAstrologyExample() {
+            document.getElementById('astro-year').value = '1990';
+            document.getElementById('astro-month').value = '5';
+            document.getElementById('astro-day').value = '15';
+            document.getElementById('astro-hour').value = '14';
+            document.getElementById('astro-minute').value = '30';
+            document.getElementById('astro-lat').value = '39.9042';
+            document.getElementById('astro-lon').value = '116.4074';
+        }
+
+        function fillDreamExample() {
+            document.getElementById('dream-description').value = '我梦见自己在飞翔，飞过高山和海洋，感觉很自由。';
+        }
+
+        function fillBaziExample() {
+            document.getElementById('bazi-year').value = '1990';
+            document.getElementById('bazi-month').value = '5';
+            document.getElementById('bazi-day').value = '15';
+            document.getElementById('bazi-hour').value = '14';
+            document.getElementById('bazi-gender').value = '1';
+        }
+
+        function fillIChingExample() {
+            document.getElementById('iching-question').value = '我是否应该换工作？';
+        }
+
+        // 页面加载时检查 API 状态
+        window.addEventListener('load', async () => {
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                if (response.ok) {
+                    console.log('✅ API Server is running');
+                } else {
+                    console.warn('⚠️ API Server is not responding correctly');
+                }
+            } catch (error) {
+                console.error('❌ Cannot connect to API Server:', error.message);
+                alert('⚠️ 无法连接到 API 服务器\n请确保已启动: node api-server.js');
+            }
+        });
+    </script>
+</body>
+</html>

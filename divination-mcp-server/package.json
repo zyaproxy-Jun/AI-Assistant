@@ -1,0 +1,40 @@
+{
+  "name": "divination-mcp-server",
+  "version": "1.0.1",
+  "description": "A comprehensive MCP server integrating multiple divination systems",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "divination",
+    "tarot",
+    "astrology",
+    "ziwei",
+    "bazi",
+    "iching",
+    "dream-interpretation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.5.0",
+    "axios": "^1.6.7",
+    "body-parser": "^2.2.0",
+    "circular-natal-horoscope-js": "^1.1.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "iztro": "^2.4.5",
+    "lunar-javascript": "^1.6.12",
+    "openai": "^4.28.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.19",
+    "typescript": "^5.3.3"
+  }
+}

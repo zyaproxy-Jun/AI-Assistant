@@ -1,0 +1,23 @@
+node_modules/
+dist/
+*.log
+.env
+.DS_Store
+*.swp
+*.swo
+.vscode/
+.idea/
+*.tgz
+
+# User-specific configurations
+claude-desktop-config.json
+
+# Temporary files
+*.tmp
+*.bak
+*~
+
+# OS-specific
+Thumbs.db
+.Spotlight-V100
+.Trashes
