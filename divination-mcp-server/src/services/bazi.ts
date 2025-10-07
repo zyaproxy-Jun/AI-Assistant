@@ -46,24 +46,46 @@ export class BaZiService {
       let solar: Solar;
       
       if (lunar_date) {
-        // Convert lunar to solar
+        // Convert lunar to solar with time
         const [year, month, day] = lunar_date.split('-').map(Number);
-        const lunar = Lunar.fromYmd(year, month, day);
+        const lunar = Lunar.fromYmdHms(year, month, day, birth_hour, 0, 0);
         solar = lunar.getSolar();
       } else if (solar_date) {
         const [year, month, day] = solar_date.split('-').map(Number);
-        solar = Solar.fromYmd(year, month, day);
+        solar = Solar.fromYmdHms(year, month, day, birth_hour, 0, 0);
       } else {
         throw new Error('Either solar_date or lunar_date must be provided');
       }
 
       const lunar = solar.getLunar();
       
-      // Calculate Four Pillars
-      const yearPillar = this.calculateYearPillar(solar.getYear());
-      const monthPillar = this.calculateMonthPillar(solar.getYear(), solar.getMonth());
-      const dayPillar = this.calculateDayPillar(solar);
-      const hourPillar = this.calculateHourPillar(dayPillar, birth_hour);
+      // Calculate Four Pillars using lunar-javascript's built-in BaZi calculation
+      // This ensures correct calculation based on solar terms (节气) for month pillar
+      const baZi = lunar.getEightChar();
+      
+      const yearPillar = {
+        stem: baZi.getYear().charAt(0),
+        branch: baZi.getYear().charAt(1),
+        pillar: baZi.getYear(),
+      };
+      
+      const monthPillar = {
+        stem: baZi.getMonth().charAt(0),
+        branch: baZi.getMonth().charAt(1),
+        pillar: baZi.getMonth(),
+      };
+      
+      const dayPillar = {
+        stem: baZi.getDay().charAt(0),
+        branch: baZi.getDay().charAt(1),
+        pillar: baZi.getDay(),
+      };
+      
+      const hourPillar = {
+        stem: baZi.getTime().charAt(0),
+        branch: baZi.getTime().charAt(1),
+        pillar: baZi.getTime(),
+      };
 
       // Five Elements analysis
       const fiveElementsCount = this.analyzeFiveElements([

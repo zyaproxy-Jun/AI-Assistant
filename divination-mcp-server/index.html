@@ -580,8 +580,14 @@
             <!-- Dream Interpretation -->
             <div id="dream" class="tab-content">
                 <div class="alert alert-info">
-                    <span>ℹ️</span>
-                    <span>梦境解析使用 AI 技术分析您的梦境含义和象征。</span>
+                    <span>🌟</span>
+                    <span><strong>SomniumSage 梦境解析</strong> - 基于情感分析 + 符号识别 + 心理洞察的科学解析系统</span>
+                </div>
+                <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                    <span style="background: #dbeafe; color: #1e40af; padding: 8px 15px; border-radius: 20px; font-size: 0.9em;">🎭 情感分析</span>
+                    <span style="background: #fce7f3; color: #9f1239; padding: 8px 15px; border-radius: 20px; font-size: 0.9em;">🔮 50+ 符号库</span>
+                    <span style="background: #ddd6fe; color: #5b21b6; padding: 8px 15px; border-radius: 20px; font-size: 0.9em;">🧠 心理洞察</span>
+                    <span style="background: #d1fae5; color: #065f46; padding: 8px 15px; border-radius: 20px; font-size: 0.9em;">⚡ 离线可用</span>
                 </div>
 
                 <form onsubmit="testDream(event)">
@@ -878,7 +884,7 @@
                 const response = await fetch('/api/dream', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ dream_description: description })
+                    body: JSON.stringify({ dream_description: description, language: 'zh-CN' })
                 });
 
                 const data = await response.json();
@@ -889,11 +895,97 @@
                 }
 
                 updateStats(true, time);
-                showResult('dream', '💭 梦境解析结果', JSON.stringify(data, null, 2), true);
+                
+                // Format SomniumSage result
+                const formattedResult = formatDreamResult(data, time);
+                showResult('dream', '💭 SomniumSage 梦境解析', formattedResult, true);
             } catch (error) {
                 updateStats(false, 0);
                 showResult('dream', '❌ 解析失败', error.message, false);
             }
+        }
+
+        // Format Dream Result for SomniumSage
+        function formatDreamResult(data, time) {
+            const sentimentEmoji = {
+                'POSITIVE': '😊',
+                'NEGATIVE': '😔',
+                'NEUTRAL': '😐'
+            }[data.sentiment?.tone] || '❓';
+
+            let html = `
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 12px; color: white; margin-bottom: 20px;">
+                    <div style="font-size: 1.1em; margin-bottom: 10px;">
+                        <strong>📊 解析完成</strong> (${time}ms) | 方法: ${data.method || 'SomniumSage'}
+                    </div>
+                </div>
+
+                <div style="background: #f9fafb; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                    <h3 style="color: #374151; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                        ${sentimentEmoji} 情感分析
+                    </h3>
+                    <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                        <div style="margin-bottom: 10px;">
+                            <strong>基调:</strong> 
+                            <span style="background: ${data.sentiment?.tone === 'POSITIVE' ? '#dcfce7' : data.sentiment?.tone === 'NEGATIVE' ? '#fee2e2' : '#e5e7eb'}; color: ${data.sentiment?.tone === 'POSITIVE' ? '#065f46' : data.sentiment?.tone === 'NEGATIVE' ? '#991b1b' : '#374151'}; padding: 4px 12px; border-radius: 12px; font-weight: bold;">
+                                ${data.sentiment?.tone || 'UNKNOWN'}
+                            </span>
+                        </div>
+                        <div style="margin-bottom: 10px;">
+                            <strong>置信度:</strong> ${((data.sentiment?.confidence || 0) * 100).toFixed(1)}%
+                        </div>
+                        <div style="color: #6b7280;">
+                            ${data.sentiment?.description || ''}
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: #f9fafb; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                    <h3 style="color: #374151; margin-bottom: 15px;">🔮 识别符号</h3>
+                    <div style="display: grid; gap: 10px;">
+            `;
+
+            if (data.symbols && data.symbols.length > 0) {
+                data.symbols.forEach(symbol => {
+                    html += `
+                        <div style="background: white; padding: 12px; border-radius: 8px; border-left: 4px solid #f59e0b;">
+                            <div style="font-weight: bold; color: #374151; margin-bottom: 5px;">
+                                ${symbol.symbol}
+                            </div>
+                            <div style="color: #6b7280; font-size: 0.95em;">
+                                ${symbol.meaning}
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                html += `<div style="color: #9ca3af; text-align: center; padding: 20px;">未识别到特定符号</div>`;
+            }
+
+            html += `
+                    </div>
+                </div>
+
+                <div style="background: #f9fafb; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                    <h3 style="color: #374151; margin-bottom: 15px;">📖 梦境解析</h3>
+                    <div style="background: white; padding: 15px; border-radius: 8px; line-height: 1.8; color: #374151;">
+                        ${data.interpretation || '无解析内容'}
+                    </div>
+                </div>
+
+                <div style="background: #f9fafb; padding: 20px; border-radius: 12px;">
+                    <h3 style="color: #374151; margin-bottom: 15px;">🧠 心理洞察</h3>
+                    <div style="background: white; padding: 15px; border-radius: 8px; line-height: 1.8; color: #374151; white-space: pre-line;">
+                        ${data.psychological_insights || '无心理洞察'}
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; padding: 15px; background: #fef3c7; border-radius: 8px; color: #78350f;">
+                    <strong>💡 提示:</strong> SomniumSage 基于情感分析、符号识别和心理学模式提供科学解析。
+                </div>
+            `;
+
+            return html;
         }
 
         // Test Bazi

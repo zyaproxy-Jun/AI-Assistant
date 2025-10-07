@@ -422,6 +422,15 @@
                         </label>
                         <textarea id="dream-description" placeholder="请详细描述你的梦境..." required></textarea>
                     </div>
+                    <div class="form-group">
+                        <label>梦中情绪（可选，多个请用逗号分隔）：</label>
+                        <input type="text" id="dream-emotions" placeholder="例如：害怕、兴奋、悲伤、快乐">
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="dream-recurring"> 这是一个重复出现的梦境
+                        </label>
+                    </div>
                     <button type="submit" class="btn">💭 解析梦境</button>
                 </form>
                 <div class="loading" id="dream-loading">
@@ -592,17 +601,21 @@
         document.getElementById('ziwei-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            const year = document.getElementById('ziwei-year').value;
+            const month = document.getElementById('ziwei-month').value.padStart(2, '0');
+            const day = document.getElementById('ziwei-day').value.padStart(2, '0');
+            const hour = parseInt(document.getElementById('ziwei-hour').value);
+            const genderValue = document.getElementById('ziwei-gender').value;
+            
             const args = {
-                year: parseInt(document.getElementById('ziwei-year').value),
-                month: parseInt(document.getElementById('ziwei-month').value),
-                day: parseInt(document.getElementById('ziwei-day').value),
-                hour: parseInt(document.getElementById('ziwei-hour').value),
-                gender: parseInt(document.getElementById('ziwei-gender').value)
+                solar_date: `${year}-${month}-${day}`,
+                birth_hour: hour,
+                gender: genderValue === '1' ? 'male' : 'female'
             };
             
             setLoading('ziwei', true);
             try {
-                const result = await callAPI('ziwei_astrology', args);
+                const result = await callAPI('ziwei_chart', args);
                 showResult('ziwei', result.content[0].text);
             } catch (error) {
                 showResult('ziwei', `❌ 错误: ${error.message}`);
@@ -640,10 +653,33 @@
         document.getElementById('dream-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const description = document.getElementById('dream-description').value;
+            const emotionsInput = document.getElementById('dream-emotions').value;
+            const recurring = document.getElementById('dream-recurring').checked;
+            
+            // 处理情绪输入（逗号或顿号分隔）
+            const emotions = emotionsInput 
+                ? emotionsInput.split(/[,，、]/).map(e => e.trim()).filter(e => e.length > 0)
+                : undefined;
             
             setLoading('dream', true);
             try {
-                const result = await callAPI('dream_interpretation', { description });
+                const params = { dream_description: description };
+                if (emotions && emotions.length > 0) {
+                    params.emotions = emotions;
+                }
+                if (recurring) {
+                    params.recurring = true;
+                }
+                
+                // Debug logging
+                console.log('[前端] 发送参数:', params);
+                console.log('[前端] 梦境描述长度:', description.length);
+                
+                const result = await callAPI('interpret_dream', params);
+                
+                // Debug logging
+                console.log('[前端] 收到结果:', result);
+                
                 showResult('dream', result.content[0].text);
             } catch (error) {
                 showResult('dream', `❌ 错误: ${error.message}`);
@@ -656,12 +692,16 @@
         document.getElementById('bazi-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            const year = document.getElementById('bazi-year').value;
+            const month = document.getElementById('bazi-month').value.padStart(2, '0');
+            const day = document.getElementById('bazi-day').value.padStart(2, '0');
+            const hour = parseInt(document.getElementById('bazi-hour').value);
+            const genderValue = document.getElementById('bazi-gender').value;
+            
             const args = {
-                year: parseInt(document.getElementById('bazi-year').value),
-                month: parseInt(document.getElementById('bazi-month').value),
-                day: parseInt(document.getElementById('bazi-day').value),
-                hour: parseInt(document.getElementById('bazi-hour').value),
-                gender: parseInt(document.getElementById('bazi-gender').value)
+                solar_date: `${year}-${month}-${day}`,
+                birth_hour: hour,
+                gender: genderValue === '1' ? 'male' : 'female'
             };
             
             setLoading('bazi', true);
@@ -679,9 +719,17 @@
         document.getElementById('iching-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            const methodMap = {
+                '时间起卦': 'coins',
+                '铜钱卦': 'coins',
+                '数字起卦': 'random'
+            };
+            
+            const selectedMethod = document.getElementById('iching-method').value;
+            
             const args = {
                 question: document.getElementById('iching-question').value,
-                method: document.getElementById('iching-method').value
+                method: methodMap[selectedMethod] || 'coins'
             };
             
             setLoading('iching', true);
@@ -720,6 +768,8 @@
 
         function fillDreamExample() {
             document.getElementById('dream-description').value = '我梦见自己在飞翔，飞过高山和海洋，感觉很自由。';
+            document.getElementById('dream-emotions').value = '自由、兴奋、快乐';
+            document.getElementById('dream-recurring').checked = false;
         }
 
         function fillBaziExample() {

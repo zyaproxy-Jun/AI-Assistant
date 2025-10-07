@@ -338,13 +338,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
 
       case 'interpret_dream':
+        const dreamDesc = args?.dream_description as string || "";
+        
         return {
           content: [
             {
               type: 'text',
               text: JSON.stringify(
                 await dreamService.interpret(
-                  args?.dream_description as string || "",
+                  dreamDesc,
                   args?.emotions as string[] || [],
                   args?.recurring as boolean || false,
                   args?.language as string || "zh-CN"

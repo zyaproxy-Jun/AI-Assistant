@@ -187,8 +187,8 @@ const server = http.createServer(async (req, res) => {
                             break;
                         
                         case 'ziwei':
-                            toolName = 'ziwei_astrology';
-                            result = await callMCPTool('ziwei_astrology', data);
+                            toolName = 'ziwei_chart';
+                            result = await callMCPTool('ziwei_chart', data);
                             break;
                         
                         case 'astrology':
@@ -197,8 +197,8 @@ const server = http.createServer(async (req, res) => {
                             break;
                         
                         case 'dream':
-                            toolName = 'dream_interpretation';
-                            result = await callMCPTool('dream_interpretation', data);
+                            toolName = 'interpret_dream';
+                            result = await callMCPTool('interpret_dream', data);
                             break;
                         
                         case 'bazi':
@@ -220,9 +220,20 @@ const server = http.createServer(async (req, res) => {
                 
                 console.log(`✅ ${toolName || endpoint} request completed in ${responseTime}ms`);
                 
+                // Parse MCP result structure
+                let responseData = result;
+                if (result.content && result.content[0] && result.content[0].text) {
+                    try {
+                        responseData = JSON.parse(result.content[0].text);
+                    } catch (e) {
+                        // If parsing fails, keep the original result
+                        console.warn('⚠️ Could not parse MCP result text, using raw result');
+                    }
+                }
+                
                 res.writeHead(200, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify({
-                    ...result,
+                    ...responseData,
                     _meta: {
                         responseTime,
                         timestamp: new Date().toISOString()
