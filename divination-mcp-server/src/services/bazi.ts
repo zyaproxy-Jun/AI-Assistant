@@ -130,9 +130,32 @@ export class BaZiService {
   }
 
   private calculateMonthPillar(year: number, month: number) {
+    // 月柱计算：根据年干支和节气确定月柱
+    // 月令从立春开始，不是公历1月1日
+    // 这里使用简化算法：年干x2 + 月数
+    
     const yearStemIndex = (year - 4) % 10;
-    const monthStemIndex = (yearStemIndex * 2 + month) % 10;
-    const monthBranchIndex = (month + 1) % 12;
+    // 月干的起始取决于年干（五虎遁）
+    // 甲己之年丙作首，乙庚之岁戊为头，丙辛必定寻庚起，丁壬壬位顺行流，戊癸甲寅为岁首
+    const monthStemStart: { [key: number]: number } = {
+      0: 2, // 甲年从丙寅开始
+      1: 4, // 乙年从戊寅开始
+      2: 6, // 丙年从庚寅开始
+      3: 8, // 丁年从壬寅开始
+      4: 0, // 戊年从甲寅开始
+      5: 2, // 己年从丙寅开始
+      6: 4, // 庚年从戊寅开始
+      7: 6, // 辛年从庚寅开始
+      8: 8, // 壬年从壬寅开始
+      9: 0  // 癸年从甲寅开始
+    };
+    
+    const baseMonthStem = monthStemStart[yearStemIndex] || 0;
+    const monthStemIndex = (baseMonthStem + month - 1) % 10;
+    
+    // 月支固定：寅月为正月（立春），卯月为二月，以此类推
+    // 地支从寅开始（寅为正月）
+    const monthBranchIndex = (month + 1) % 12; // 1月->寅(2), 2月->卯(3), ...
     
     return {
       stem: this.heavenlyStems[monthStemIndex],
@@ -155,7 +178,24 @@ export class BaZiService {
   }
 
   private calculateHourPillar(dayPillar: any, hour: number) {
+    // Validate day pillar has required properties
+    if (!dayPillar || !dayPillar.stem) {
+      return {
+        stem: '未知',
+        branch: '未知',
+        pillar: '未知',
+      };
+    }
+    
     const dayStemIndex = this.heavenlyStems.indexOf(dayPillar.stem);
+    if (dayStemIndex === -1) {
+      return {
+        stem: '未知',
+        branch: '未知',
+        pillar: '未知',
+      };
+    }
+    
     const hourBranchIndex = Math.floor((hour + 1) / 2) % 12;
     const hourStemIndex = (dayStemIndex * 2 + hourBranchIndex) % 10;
     

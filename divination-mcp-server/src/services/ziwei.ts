@@ -106,10 +106,11 @@ export class ZiWeiService {
   }
 
   private generateInterpretation(astrolabe: any, language: string): string {
-    const soulPalace = astrolabe.palace('命宫');
-    const careerPalace = astrolabe.palace('官禄宫');
-    const wealthPalace = astrolabe.palace('财帛宫');
-    const marriagePalace = astrolabe.palace('夫妻宫');
+    // Use palaces array to find specific palaces
+    const soulPalace = astrolabe.palaces?.find((p: any) => p.name === '命宫');
+    const careerPalace = astrolabe.palaces?.find((p: any) => p.name === '官禄');
+    const wealthPalace = astrolabe.palaces?.find((p: any) => p.name === '财帛');
+    const marriagePalace = astrolabe.palaces?.find((p: any) => p.name === '夫妻');
 
     let interpretation = `# 紫微斗数命盘解析\n\n`;
     interpretation += `## 基本信息\n`;
@@ -120,26 +121,26 @@ export class ZiWeiService {
     interpretation += `- 五行局: ${astrolabe.fiveElementsClass}\n\n`;
 
     interpretation += `## 命宫分析\n`;
-    interpretation += `命宫位于${soulPalace?.earthlyBranch}，天干为${soulPalace?.heavenlyStem}。\n`;
-    if (soulPalace?.majorStars.length > 0) {
+    interpretation += `命宫位于${soulPalace?.earthlyBranch || '未知'}，天干为${soulPalace?.heavenlyStem || '未知'}。\n`;
+    if (soulPalace?.majorStars && soulPalace.majorStars.length > 0) {
       interpretation += `主星: ${soulPalace.majorStars.map((s: any) => s.name).join('、')}\n`;
       interpretation += `这些主星的组合显示出您的性格特质和人生方向。\n\n`;
     }
 
     interpretation += `## 事业宫\n`;
-    if (careerPalace?.majorStars.length > 0) {
+    if (careerPalace?.majorStars && careerPalace.majorStars.length > 0) {
       interpretation += `事业宫主星: ${careerPalace.majorStars.map((s: any) => s.name).join('、')}\n`;
       interpretation += `这些星曜影响您的事业发展方向和成就。\n\n`;
     }
 
     interpretation += `## 财帛宫\n`;
-    if (wealthPalace?.majorStars.length > 0) {
+    if (wealthPalace?.majorStars && wealthPalace.majorStars.length > 0) {
       interpretation += `财帛宫主星: ${wealthPalace.majorStars.map((s: any) => s.name).join('、')}\n`;
       interpretation += `这些星曜显示您的财运状况和理财能力。\n\n`;
     }
 
     interpretation += `## 夫妻宫\n`;
-    if (marriagePalace?.majorStars.length > 0) {
+    if (marriagePalace?.majorStars && marriagePalace.majorStars.length > 0) {
       interpretation += `夫妻宫主星: ${marriagePalace.majorStars.map((s: any) => s.name).join('、')}\n`;
       interpretation += `这些星曜反映您的感情状况和婚姻运势。\n\n`;
     }

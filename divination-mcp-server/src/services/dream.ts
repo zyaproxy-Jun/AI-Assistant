@@ -37,13 +37,19 @@ export class DreamService {
     language: string = 'zh-CN'
   ) {
     try {
+      // Extract symbols first
+      const extractedSymbols = this.extractSymbols(dreamDescription, language);
+      
+      // Ensure emotions is an array
+      const dreamEmotions = emotions && emotions.length > 0 ? emotions : [];
+      
+      // Get interpretation
       let interpretation: string;
-
       if (this.openai) {
         // Use AI for interpretation
         interpretation = await this.aiInterpretation(
           dreamDescription,
-          emotions,
+          dreamEmotions,
           recurring,
           language
         );
@@ -51,24 +57,40 @@ export class DreamService {
         // Fallback to rule-based interpretation
         interpretation = this.ruleBasedInterpretation(
           dreamDescription,
-          emotions,
+          dreamEmotions,
           recurring,
           language
         );
       }
 
+      // Get psychological insights
+      const insights = this.getPsychologicalInsights(dreamDescription, language);
+
       return {
         dream: dreamDescription,
-        emotions: emotions || [],
+        emotions: dreamEmotions,
         recurring,
         interpretation,
-        symbols: this.extractSymbols(dreamDescription, language),
-        psychological_insights: this.getPsychologicalInsights(dreamDescription, language),
+        symbols: extractedSymbols.length > 0 ? extractedSymbols : this.getDefaultSymbols(language),
+        psychological_insights: insights,
         timestamp: new Date().toISOString(),
       };
     } catch (error) {
       throw new Error(`梦境解析失败: ${error instanceof Error ? error.message : String(error)}`);
     }
+  }
+  
+  /**
+   * Get default symbols when no specific symbols are found
+   */
+  private getDefaultSymbols(language: string): Array<{ symbol: string; meaning: string }> {
+    const isChinese = language.startsWith('zh');
+    return [{
+      symbol: isChinese ? '梦境元素' : 'Dream elements',
+      meaning: isChinese 
+        ? '梦境中的各种元素都具有象征意义，反映您的潜意识和内心世界'
+        : 'Various elements in your dream have symbolic meanings, reflecting your subconscious and inner world'
+    }];
   }
 
   /**
