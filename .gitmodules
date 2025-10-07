@@ -1,0 +1,3 @@
+[submodule "botpress"]
+	path = botpress
+	url = https://github.com/zyaproxy-Jun/botpress.git
