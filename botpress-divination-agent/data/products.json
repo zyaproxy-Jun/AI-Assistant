@@ -1,0 +1,245 @@
+[
+  {
+    "id": "product_001",
+    "name": "天空蓝水晶手链",
+    "type": "physical",
+    "category": "crystal",
+    "price": 299,
+    "currency": "CNY",
+    "description": "提升灵性，助您追求自由",
+    "detailedDescription": "天然天空蓝水晶手链，象征自由与灵性的觉醒。适合经常梦见飞翔、追求精神自由的人佩戴。",
+    "images": [
+      "/assets/images/products/crystal_sky_blue.jpg"
+    ],
+    "tags": ["水晶", "灵性", "自由", "飞翔"],
+    "popularity": 95,
+    "stock": 50,
+    "rating": 4.8,
+    "reviews": 128,
+    "matchingRules": {
+      "divinationTypes": ["dream", "astrology"],
+      "keywords": ["飞", "自由", "翱翔", "天空", "超越"],
+      "symbols": ["飞", "鸟", "天空"],
+      "sentiment": ["POSITIVE"],
+      "minMatchScore": 50
+    }
+  },
+  {
+    "id": "product_002",
+    "name": "《梦境解析完整指南》电子书",
+    "type": "digital",
+    "category": "ebook",
+    "price": 49,
+    "currency": "CNY",
+    "description": "深度解读飞翔梦境的心理学含义",
+    "detailedDescription": "由资深心理学家撰写的梦境解析指南，包含500+常见梦境符号解释，特别深入分析飞翔类梦境的心理学意义。",
+    "images": [
+      "/assets/images/products/ebook_dream_guide.jpg"
+    ],
+    "tags": ["电子书", "梦境", "心理学", "解梦"],
+    "popularity": 87,
+    "stock": 9999,
+    "rating": 4.9,
+    "reviews": 256,
+    "matchingRules": {
+      "divinationTypes": ["dream"],
+      "keywords": ["梦", "解梦", "心理", "分析"],
+      "sentiment": ["POSITIVE", "NEUTRAL", "NEGATIVE"],
+      "minMatchScore": 40
+    }
+  },
+  {
+    "id": "product_003",
+    "name": "韦特塔罗牌精装版",
+    "type": "physical",
+    "category": "tarot",
+    "price": 188,
+    "currency": "CNY",
+    "description": "经典韦特塔罗牌，附赠详细解读手册",
+    "detailedDescription": "正版授权韦特塔罗牌，78张完整牌组，配备中英文双语解读手册，适合塔罗爱好者和专业占卜师。",
+    "images": [
+      "/assets/images/products/tarot_rider_waite.jpg"
+    ],
+    "tags": ["塔罗牌", "韦特", "占卜", "灵性"],
+    "popularity": 92,
+    "stock": 35,
+    "rating": 4.9,
+    "reviews": 189,
+    "matchingRules": {
+      "divinationTypes": ["tarot"],
+      "keywords": ["塔罗", "占卜", "命运", "指引"],
+      "sentiment": ["POSITIVE", "NEUTRAL"],
+      "minMatchScore": 60
+    }
+  },
+  {
+    "id": "product_004",
+    "name": "易经解卦全书",
+    "type": "physical",
+    "category": "book",
+    "price": 128,
+    "currency": "CNY",
+    "description": "六十四卦详解，附赠铜钱三枚",
+    "detailedDescription": "传统易经六十四卦完整解析，配备专业占卜铜钱，适合易经学习和实际占卜使用。",
+    "images": [
+      "/assets/images/products/iching_book.jpg"
+    ],
+    "tags": ["易经", "国学", "占卜", "智慧"],
+    "popularity": 78,
+    "stock": 42,
+    "rating": 4.7,
+    "reviews": 95,
+    "matchingRules": {
+      "divinationTypes": ["iching"],
+      "keywords": ["易经", "卦象", "变化", "智慧"],
+      "sentiment": ["POSITIVE", "NEUTRAL"],
+      "minMatchScore": 55
+    }
+  },
+  {
+    "id": "product_005",
+    "name": "紫微斗数定制命盘报告",
+    "type": "digital",
+    "category": "report",
+    "price": 399,
+    "currency": "CNY",
+    "description": "专业命理师一对一定制紫微斗数全盘分析",
+    "detailedDescription": "由资深紫微斗数命理师根据您的生辰八字，量身定制完整的紫微命盘分析报告，包含命格、运势、事业、感情等全方位解读。",
+    "images": [
+      "/assets/images/products/ziwei_custom_report.jpg"
+    ],
+    "tags": ["紫微斗数", "定制报告", "命理", "运势"],
+    "popularity": 85,
+    "stock": 9999,
+    "rating": 4.8,
+    "reviews": 67,
+    "matchingRules": {
+      "divinationTypes": ["ziwei"],
+      "keywords": ["命运", "运势", "命理", "分析"],
+      "sentiment": ["POSITIVE", "NEUTRAL"],
+      "minMatchScore": 70
+    }
+  },
+  {
+    "id": "product_006",
+    "name": "八字命理精批服务",
+    "type": "digital",
+    "category": "service",
+    "price": 288,
+    "currency": "CNY",
+    "description": "传统八字命理精批，含流年运势分析",
+    "detailedDescription": "专业八字命理师为您提供详细的四柱命理分析，包括五行喜忌、十神格局、大运流年等全面解读。",
+    "images": [
+      "/assets/images/products/bazi_service.jpg"
+    ],
+    "tags": ["八字", "命理", "运势", "精批"],
+    "popularity": 81,
+    "stock": 9999,
+    "rating": 4.7,
+    "reviews": 54,
+    "matchingRules": {
+      "divinationTypes": ["bazi"],
+      "keywords": ["八字", "命理", "五行", "运势"],
+      "sentiment": ["POSITIVE", "NEUTRAL"],
+      "minMatchScore": 65
+    }
+  },
+  {
+    "id": "product_007",
+    "name": "星座本命盘完整解读",
+    "type": "digital",
+    "category": "report",
+    "price": 199,
+    "currency": "CNY",
+    "description": "西方占星本命盘深度解析报告",
+    "detailedDescription": "专业占星师为您解读本命盘，分析太阳、月亮、上升星座，十二宫位，行星相位等全面信息。",
+    "images": [
+      "/assets/images/products/astrology_natal_chart.jpg"
+    ],
+    "tags": ["占星", "本命盘", "星座", "西方占星"],
+    "popularity": 89,
+    "stock": 9999,
+    "rating": 4.9,
+    "reviews": 143,
+    "matchingRules": {
+      "divinationTypes": ["astrology"],
+      "keywords": ["星座", "占星", "星盘", "行星"],
+      "sentiment": ["POSITIVE", "NEUTRAL"],
+      "minMatchScore": 60
+    }
+  },
+  {
+    "id": "product_008",
+    "name": "黑曜石护身挂件",
+    "type": "physical",
+    "category": "crystal",
+    "price": 168,
+    "currency": "CNY",
+    "description": "辟邪护身，消除负能量",
+    "detailedDescription": "天然黑曜石雕刻护身挂件，有助于抵御负面能量，保护气场，适合梦境不安或遇到困扰的人佩戴。",
+    "images": [
+      "/assets/images/products/obsidian_pendant.jpg"
+    ],
+    "tags": ["黑曜石", "护身", "辟邪", "水晶"],
+    "popularity": 76,
+    "stock": 60,
+    "rating": 4.6,
+    "reviews": 87,
+    "matchingRules": {
+      "divinationTypes": ["dream", "tarot"],
+      "keywords": ["噩梦", "恐惧", "不安", "保护"],
+      "symbols": ["黑暗", "恶魔", "怪物"],
+      "sentiment": ["NEGATIVE"],
+      "minMatchScore": 50
+    }
+  },
+  {
+    "id": "product_009",
+    "name": "《塔罗进阶实战课》视频课程",
+    "type": "digital",
+    "category": "course",
+    "price": 599,
+    "currency": "CNY",
+    "description": "从入门到精通，12小时完整塔罗教学",
+    "detailedDescription": "资深塔罗师授课，包含塔罗历史、牌义解读、牌阵运用、实战案例等全套课程，适合想要深入学习塔罗的爱好者。",
+    "images": [
+      "/assets/images/products/tarot_course.jpg"
+    ],
+    "tags": ["塔罗课程", "视频教学", "塔罗学习", "进阶"],
+    "popularity": 83,
+    "stock": 9999,
+    "rating": 4.8,
+    "reviews": 112,
+    "matchingRules": {
+      "divinationTypes": ["tarot"],
+      "keywords": ["学习", "深入", "了解", "掌握"],
+      "sentiment": ["POSITIVE", "NEUTRAL"],
+      "minMatchScore": 55
+    }
+  },
+  {
+    "id": "product_010",
+    "name": "粉晶爱情守护石",
+    "type": "physical",
+    "category": "crystal",
+    "price": 139,
+    "currency": "CNY",
+    "description": "招桃花，增进感情运势",
+    "detailedDescription": "天然粉晶原石，象征爱情与人际关系的和谐，适合希望改善感情运势或梦到爱情主题的人。",
+    "images": [
+      "/assets/images/products/rose_quartz.jpg"
+    ],
+    "tags": ["粉晶", "爱情", "桃花", "水晶"],
+    "popularity": 91,
+    "stock": 75,
+    "rating": 4.7,
+    "reviews": 156,
+    "matchingRules": {
+      "divinationTypes": ["dream", "tarot", "astrology"],
+      "keywords": ["爱情", "恋爱", "感情", "伴侣", "婚姻"],
+      "symbols": ["心", "花", "爱人"],
+      "sentiment": ["POSITIVE"],
+      "minMatchScore": 50
+    }
+  }
+]

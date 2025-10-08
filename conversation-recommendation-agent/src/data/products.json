@@ -1,0 +1,292 @@
+[
+  {
+    "id": "prod001",
+    "name": "天然紫水晶球",
+    "type": "physical",
+    "description": "高品质巴西天然紫水晶球，直径约 8-10cm，能量纯净，适合冥想和能量提升。紫水晶有助于开发智慧、提升灵性。",
+    "price": 188,
+    "currency": "CNY",
+    "images": [
+      "https://example.com/images/crystal-ball-purple.jpg"
+    ],
+    "category": "crystals",
+    "tags": ["水晶", "紫水晶", "能量石", "冥想", "开运"],
+    "stock": 50,
+    "status": "active",
+    "customizable": false,
+    "salesCount": 156,
+    "features": [
+      "巴西原产天然紫水晶",
+      "手工精选，每颗独一无二",
+      "附赠水晶专用底座",
+      "提供能量净化指南"
+    ],
+    "divinationAffinity": {
+      "themes": ["career", "wisdom", "spiritual"],
+      "keywords": ["成功", "智慧", "灵性", "提升", "能量"],
+      "sentiments": ["positive"],
+      "matchWeight": 0.85
+    }
+  },
+  {
+    "id": "prod002",
+    "name": "韦特塔罗牌（精装版）",
+    "type": "physical",
+    "description": "经典韦特塔罗牌，精装礼盒版，含 78 张完整牌组、中英文对照手册、黑色绒布袋。初学者与专业占卜师皆宜。",
+    "price": 99,
+    "currency": "CNY",
+    "images": [
+      "https://example.com/images/tarot-deck-waite.jpg"
+    ],
+    "category": "tarot",
+    "tags": ["塔罗牌", "韦特", "占卜", "灵性工具"],
+    "stock": 200,
+    "status": "active",
+    "customizable": false,
+    "salesCount": 523,
+    "features": [
+      "78 张完整牌组",
+      "高品质卡纸印刷",
+      "中英文双语手册",
+      "精美礼盒包装"
+    ],
+    "divinationAffinity": {
+      "themes": ["love", "career", "future"],
+      "keywords": ["指引", "未来", "解答", "预测"],
+      "sentiments": ["neutral", "positive"],
+      "matchWeight": 0.90
+    }
+  },
+  {
+    "id": "prod003",
+    "name": "粉水晶手链",
+    "type": "physical",
+    "description": "天然粉水晶手链，珠径 8mm，925 银配件。粉水晶主爱情运，有助于改善人际关系，增进异性缘。",
+    "price": 128,
+    "currency": "CNY",
+    "images": [
+      "https://example.com/images/rose-quartz-bracelet.jpg"
+    ],
+    "category": "crystals",
+    "tags": ["水晶", "粉水晶", "手链", "爱情运", "人际关系"],
+    "stock": 88,
+    "status": "active",
+    "customizable": true,
+    "salesCount": 312,
+    "features": [
+      "天然A货粉水晶",
+      "925 银配件",
+      "支持定制珠径和长度",
+      "附赠水晶能量卡"
+    ],
+    "divinationAffinity": {
+      "themes": ["love", "relationships", "harmony"],
+      "keywords": ["爱情", "桃花", "人缘", "和谐", "治愈"],
+      "sentiments": ["positive"],
+      "matchWeight": 0.88
+    }
+  },
+  {
+    "id": "prod004",
+    "name": "《周易入门》电子书",
+    "type": "digital",
+    "description": "系统学习易经占卜的入门教程，包含 64 卦详解、起卦方法、实战案例。PDF 格式，支持手机和电脑阅读。",
+    "price": 39,
+    "currency": "CNY",
+    "images": [
+      "https://example.com/images/iching-ebook-cover.jpg"
+    ],
+    "category": "ebooks",
+    "tags": ["易经", "电子书", "占卜教程", "学习"],
+    "stock": 9999,
+    "status": "active",
+    "customizable": false,
+    "salesCount": 1245,
+    "features": [
+      "300 页完整教程",
+      "64 卦全面解读",
+      "配有实战案例",
+      "终身更新支持"
+    ],
+    "divinationAffinity": {
+      "themes": ["wisdom", "learning", "future"],
+      "keywords": ["学习", "知识", "易经", "预测", "智慧"],
+      "sentiments": ["neutral", "positive"],
+      "matchWeight": 0.75
+    }
+  },
+  {
+    "id": "prod005",
+    "name": "黑曜石貔貅吊坠",
+    "type": "physical",
+    "description": "天然黑曜石雕刻貔貅吊坠，附赠黑绳项链。黑曜石辟邪化煞，貔貅招财进宝，双重能量守护。",
+    "price": 88,
+    "currency": "CNY",
+    "images": [
+      "https://example.com/images/obsidian-pixiu-pendant.jpg"
+    ],
+    "category": "crystals",
+    "tags": ["黑曜石", "貔貅", "招财", "辟邪", "吊坠"],
+    "stock": 120,
+    "status": "active",
+    "customizable": false,
+    "salesCount": 678,
+    "features": [
+      "天然黑曜石",
+      "手工雕刻貔貅造型",
+      "已开光加持",
+      "附赠黑绳项链"
+    ],
+    "divinationAffinity": {
+      "themes": ["wealth", "protection", "career"],
+      "keywords": ["财运", "辟邪", "守护", "事业", "转运"],
+      "sentiments": ["positive"],
+      "matchWeight": 0.82
+    }
+  },
+  {
+    "id": "prod006",
+    "name": "紫微斗数命盘解析课程",
+    "type": "digital",
+    "description": "专业占卜师主讲的紫微斗数线上视频课程，共 20 节课，从零基础到能独立排盘解盘。",
+    "price": 299,
+    "currency": "CNY",
+    "images": [
+      "https://example.com/images/ziwei-course-cover.jpg"
+    ],
+    "category": "courses",
+    "tags": ["紫微斗数", "在线课程", "命理", "学习"],
+    "stock": 9999,
+    "status": "active",
+    "customizable": false,
+    "salesCount": 234,
+    "features": [
+      "20 节高清视频课程",
+      "配套学习资料",
+      "专属学习社群",
+      "终身回看权限"
+    ],
+    "divinationAffinity": {
+      "themes": ["learning", "career", "future"],
+      "keywords": ["学习", "命理", "紫微", "提升", "专业"],
+      "sentiments": ["positive"],
+      "matchWeight": 0.78
+    }
+  },
+  {
+    "id": "prod007",
+    "name": "白水晶簇",
+    "type": "physical",
+    "description": "天然白水晶簇，重量约 500-800g，可用于净化其他水晶、改善磁场、提升家居能量。",
+    "price": 268,
+    "currency": "CNY",
+    "images": [
+      "https://example.com/images/clear-quartz-cluster.jpg"
+    ],
+    "category": "crystals",
+    "tags": ["水晶", "白水晶", "水晶簇", "净化", "能量"],
+    "stock": 35,
+    "status": "active",
+    "customizable": false,
+    "salesCount": 89,
+    "features": [
+      "天然白水晶",
+      "晶体清透完整",
+      "净化能量强",
+      "附赠摆放指南"
+    ],
+    "divinationAffinity": {
+      "themes": ["harmony", "spiritual", "health"],
+      "keywords": ["净化", "能量", "和谐", "健康", "平衡"],
+      "sentiments": ["neutral", "positive"],
+      "matchWeight": 0.80
+    }
+  },
+  {
+    "id": "prod008",
+    "name": "《塔罗牌解读秘籍》PDF",
+    "type": "digital",
+    "description": "深度解读塔罗牌的象征意义和占卜技巧，含 100+ 实战案例分析。适合进阶学习者。",
+    "price": 59,
+    "currency": "CNY",
+    "images": [
+      "https://example.com/images/tarot-guide-pdf.jpg"
+    ],
+    "category": "ebooks",
+    "tags": ["塔罗", "电子书", "学习资料", "进阶"],
+    "stock": 9999,
+    "status": "active",
+    "customizable": false,
+    "salesCount": 567,
+    "features": [
+      "200+ 页深度解读",
+      "100+ 实战案例",
+      "牌阵设计技巧",
+      "可打印学习"
+    ],
+    "divinationAffinity": {
+      "themes": ["learning", "love", "career"],
+      "keywords": ["塔罗", "学习", "提升", "技巧", "解读"],
+      "sentiments": ["positive"],
+      "matchWeight": 0.77
+    }
+  },
+  {
+    "id": "prod009",
+    "name": "红玛瑙本命年手链",
+    "type": "physical",
+    "description": "天然红玛瑙手链，珠径 10mm，适合本命年佩戴。红玛瑙辟邪化太岁，增强气场。",
+    "price": 98,
+    "currency": "CNY",
+    "images": [
+      "https://example.com/images/red-agate-bracelet.jpg"
+    ],
+    "category": "crystals",
+    "tags": ["玛瑙", "红玛瑙", "本命年", "辟邪", "手链"],
+    "stock": 150,
+    "status": "active",
+    "customizable": true,
+    "salesCount": 423,
+    "features": [
+      "天然红玛瑙",
+      "本命年专用",
+      "支持定制尺寸",
+      "已开光加持"
+    ],
+    "divinationAffinity": {
+      "themes": ["protection", "luck", "health"],
+      "keywords": ["辟邪", "本命年", "化太岁", "平安", "健康"],
+      "sentiments": ["positive"],
+      "matchWeight": 0.83
+    }
+  },
+  {
+    "id": "prod010",
+    "name": "八字命理分析报告（定制）",
+    "type": "digital",
+    "description": "专业命理师根据您的八字进行深度分析，生成 50+ 页个性化命理报告，涵盖事业、财运、婚姻、健康等。",
+    "price": 388,
+    "currency": "CNY",
+    "images": [
+      "https://example.com/images/bazi-analysis-report.jpg"
+    ],
+    "category": "services",
+    "tags": ["八字", "命理分析", "定制服务", "专业"],
+    "stock": 9999,
+    "status": "active",
+    "customizable": true,
+    "salesCount": 178,
+    "features": [
+      "50+ 页个性化报告",
+      "专业命理师分析",
+      "事业财运详解",
+      "3-5 个工作日交付"
+    ],
+    "divinationAffinity": {
+      "themes": ["career", "wealth", "love", "health"],
+      "keywords": ["命理", "八字", "分析", "专业", "详解"],
+      "sentiments": ["neutral", "positive"],
+      "matchWeight": 0.92
+    }
+  }
+]

@@ -1,0 +1,51 @@
+{
+  "name": "fulfillment-review-agent",
+  "version": "1.0.0",
+  "description": "Fulfillment, Review & Sharing Agent with Logistics Tracking & Social Media Integration",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "test": "node --test",
+    "lint": "eslint src/**/*.ts"
+  },
+  "keywords": [
+    "fulfillment",
+    "delivery",
+    "logistics",
+    "review",
+    "social-sharing",
+    "botpress"
+  ],
+  "author": "Ether AI",
+  "license": "MIT",
+  "dependencies": {
+    "@botpress/sdk": "^0.3.0",
+    "@botpress/client": "^0.3.0",
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "mongodb": "^6.3.0",
+    "axios": "^1.6.2",
+    "dotenv": "^16.3.1",
+    "uuid": "^9.0.1",
+    "zod": "^3.22.4",
+    "nodemailer": "^6.9.7",
+    "qrcode": "^1.5.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/express": "^4.17.21",
+    "@types/cors": "^2.8.17",
+    "@types/uuid": "^9.0.7",
+    "@types/nodemailer": "^6.4.14",
+    "@types/qrcode": "^1.5.5",
+    "typescript": "^5.3.3",
+    "tsx": "^4.7.0",
+    "eslint": "^8.55.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

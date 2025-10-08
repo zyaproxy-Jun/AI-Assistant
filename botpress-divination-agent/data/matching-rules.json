@@ -1,0 +1,111 @@
+[
+  {
+    "id": "rule_001",
+    "name": "飞翔梦境匹配规则",
+    "description": "梦见飞翔类梦境的商品推荐规则",
+    "conditions": {
+      "divinationType": "dream",
+      "keywords": ["飞", "翱翔", "天空", "自由"],
+      "symbols": ["飞", "鸟", "翅膀"],
+      "sentimentTone": ["POSITIVE"]
+    },
+    "productIds": ["product_001", "product_002"],
+    "weight": 10
+  },
+  {
+    "id": "rule_002",
+    "name": "噩梦防护规则",
+    "description": "噩梦或负面梦境的商品推荐",
+    "conditions": {
+      "divinationType": "dream",
+      "keywords": ["恐惧", "害怕", "不安", "噩梦"],
+      "symbols": ["黑暗", "恶魔", "怪物"],
+      "sentimentTone": ["NEGATIVE"]
+    },
+    "productIds": ["product_008", "product_002"],
+    "weight": 9
+  },
+  {
+    "id": "rule_003",
+    "name": "爱情梦境规则",
+    "description": "爱情相关梦境的商品推荐",
+    "conditions": {
+      "divinationType": "dream",
+      "keywords": ["爱情", "恋爱", "感情", "伴侣"],
+      "symbols": ["心", "花", "爱人"],
+      "sentimentTone": ["POSITIVE"]
+    },
+    "productIds": ["product_010", "product_002"],
+    "weight": 8
+  },
+  {
+    "id": "rule_004",
+    "name": "塔罗占卜工具推荐",
+    "description": "塔罗占卜后推荐塔罗相关商品",
+    "conditions": {
+      "divinationType": "tarot"
+    },
+    "productIds": ["product_003", "product_009"],
+    "weight": 10
+  },
+  {
+    "id": "rule_005",
+    "name": "易经学习推荐",
+    "description": "易经占卜后推荐学习资料",
+    "conditions": {
+      "divinationType": "iching"
+    },
+    "productIds": ["product_004"],
+    "weight": 10
+  },
+  {
+    "id": "rule_006",
+    "name": "紫微斗数深度分析",
+    "description": "紫微斗数占卜后推荐定制服务",
+    "conditions": {
+      "divinationType": "ziwei"
+    },
+    "productIds": ["product_005"],
+    "weight": 10
+  },
+  {
+    "id": "rule_007",
+    "name": "八字命理服务",
+    "description": "八字占卜后推荐精批服务",
+    "conditions": {
+      "divinationType": "bazi"
+    },
+    "productIds": ["product_006"],
+    "weight": 10
+  },
+  {
+    "id": "rule_008",
+    "name": "西方占星深度解读",
+    "description": "占星占卜后推荐本命盘解读",
+    "conditions": {
+      "divinationType": "astrology"
+    },
+    "productIds": ["product_007"],
+    "weight": 10
+  },
+  {
+    "id": "rule_009",
+    "name": "积极情绪水晶推荐",
+    "description": "正面占卜结果推荐提升运势的水晶",
+    "conditions": {
+      "sentimentTone": ["POSITIVE"]
+    },
+    "productIds": ["product_001", "product_010"],
+    "weight": 7
+  },
+  {
+    "id": "rule_010",
+    "name": "负面情绪防护推荐",
+    "description": "负面占卜结果推荐防护类商品",
+    "conditions": {
+      "sentimentTone": ["NEGATIVE"]
+    },
+    "productIds": ["product_008"],
+    "weight": 8
+  }
+]
